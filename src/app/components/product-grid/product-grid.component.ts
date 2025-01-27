@@ -1,10 +1,11 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductCardComponent } from '../product-card/product-card.component';
+import { SearchForPipe } from '../../pipes/search-for.pipe';
 import { SortByPipe } from '../../pipes/sort-by.pipe';
 import { ProductService } from '../../services/product.service';
-import { SearchForPipe } from '../../pipes/search-for.pipe';
+import { ProductCardComponent } from '../product-card/product-card.component';
 import { SelectComponent } from '../select/select.component';
+import { Product } from '../../interfaces/product';
 
 @Component({
   selector: 'app-product-grid',
@@ -18,10 +19,14 @@ import { SelectComponent } from '../select/select.component';
   ],
   templateUrl: './product-grid.component.html',
 })
-export class ProductGridComponent {
+export class ProductGridComponent implements OnInit {
+  constructor(public productService: ProductService) {}
   @Input() searchTerm: string = '';
-  productService = inject(ProductService);
-  products = this.productService.getProducts();
+  products: Product[] = [];
+
+  ngOnInit(): void {
+    this.products = this.productService.getProducts();
+  }
 
   get favoriteCount(): number {
     return this.productService.getFavoriteCount();

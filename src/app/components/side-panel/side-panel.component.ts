@@ -18,6 +18,10 @@ export class SidePanelComponent {
     public productService: ProductService,
   ) {}
 
+  get favoriteCount(): number {
+    return this.productService.getFavoriteCount();
+  }
+
   get favoriteProducts(): Product[] {
     return this.productService.products.filter((p) => p.isFavorite);
   }

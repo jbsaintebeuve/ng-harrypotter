@@ -1,16 +1,15 @@
-import { Component, Input, inject } from '@angular/core';
-import { Product } from '../../interfaces/product';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { faHeart } from '@ng-icons/font-awesome/regular';
-import { faSolidHeart } from '@ng-icons/font-awesome/solid';
 import {
   CurrencyPipe,
   DatePipe,
   DecimalPipe,
   UpperCasePipe,
 } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { faHeart } from '@ng-icons/font-awesome/regular';
+import { faSolidHeart } from '@ng-icons/font-awesome/solid';
+import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
-import { NgIconComponent } from '@ng-icons/core';
 
 @Component({
   selector: 'app-product-card',
@@ -27,6 +26,7 @@ import { NgIconComponent } from '@ng-icons/core';
   styles: ``,
 })
 export class ProductCardComponent {
+  constructor(public productService: ProductService) {}
   @Input({ required: true }) product: Product = {
     id: 0,
     name: '',
@@ -34,8 +34,6 @@ export class ProductCardComponent {
     price: 0,
     createdDate: new Date(),
   };
-
-  productService = inject(ProductService);
 
   switchFav() {
     this.productService.switchFav(this.product);
