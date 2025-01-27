@@ -9,7 +9,9 @@ import {
   DecimalPipe,
   UpperCasePipe,
 } from '@angular/common';
-import { NgIconComponent } from '@ng-icons/core';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { faHeart } from '@ng-icons/font-awesome/regular';
+import { faSolidHeart, faSolidImage } from '@ng-icons/font-awesome/solid';
 
 @Component({
   selector: 'app-product-detail',
@@ -21,6 +23,7 @@ import { NgIconComponent } from '@ng-icons/core';
     DatePipe,
     NgIconComponent,
   ],
+  providers: [provideIcons({ faHeart, faSolidHeart, faSolidImage })],
   templateUrl: './product-detail.component.html',
   styles: ``,
 })
