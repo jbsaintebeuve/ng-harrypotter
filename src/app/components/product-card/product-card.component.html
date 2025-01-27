@@ -7,14 +7,14 @@
     </h1>
     @if (product.isFavorite) {
     <ng-icon
-      (click)="switchFav()"
-      class="text-xl text-neutral-700 hover:cursor-pointer select-none"
+      (click)="switchFav($event)"
+      class="text-xl text-neutral-700 hover:cursor-pointer select-none pointer-events-auto"
       name="faSolidHeart"
     />
     } @else {
     <ng-icon
-      (click)="switchFav()"
-      class="text-xl text-neutral-600 hover:cursor-pointer select-none"
+      (click)="switchFav($event)"
+      class="text-xl text-neutral-600 hover:cursor-pointer select-none pointer-events-auto"
       name="faHeart"
     />
     }

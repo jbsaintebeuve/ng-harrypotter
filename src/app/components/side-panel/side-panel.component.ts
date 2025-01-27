@@ -4,11 +4,14 @@ import { ProductService } from '../../services/product.service';
 import { SidePanelService } from '../../services/side-panel.service';
 import { Product } from '../../interfaces/product';
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
 
 @Component({
   selector: 'app-side-panel',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCardComponent, NgIconComponent],
+  providers: [provideIcons({ faSolidCartShopping })],
   templateUrl: './side-panel.component.html',
   styleUrls: ['./side-panel.component.css'],
 })

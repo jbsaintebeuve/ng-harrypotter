@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { faSolidHeart } from '@ng-icons/font-awesome/solid';
 import { ProductService } from '../../services/product.service';
 import { SidePanelService } from '../../services/side-panel.service';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [NgIconComponent, RouterLink],
-  providers: [provideIcons({ faSolidHeart })],
+  providers: [provideIcons({ faSolidCartShopping })],
   templateUrl: './header.component.html',
   styles: ``,
 })

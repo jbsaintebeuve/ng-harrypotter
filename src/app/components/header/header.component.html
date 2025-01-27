@@ -1,9 +1,15 @@
 <header
   class="w-full flex justify-between items-center p-4 bg-neutral-700 text-white"
 >
-  <a routerLink="/">
-    <h1 class="text-2xl">Harry Potter</h1>
-  </a>
+  <div class="flex items-center gap-10">
+    <a routerLink="/">
+      <h1 class="text-2xl">Harry Potter</h1>
+    </a>
+    <nav class="flex gap-5">
+      <a routerLink="/favoris" class="mx-2">Favoris</a>
+      <a routerLink="/panier" class="mx-2">Panier</a>
+    </nav>
+  </div>
   <button
     (click)="openSidePanel()"
     class="bg-neutral-200 rounded-md px-4 py-2 flex items-center"
@@ -14,6 +20,6 @@
       >{{ favoriteCount }}</span
     >
     }
-    <ng-icon name="faSolidHeart" class="text-neutral-700" />
+    <ng-icon name="faSolidCartShopping" class="text-neutral-700" />
   </button>
 </header>

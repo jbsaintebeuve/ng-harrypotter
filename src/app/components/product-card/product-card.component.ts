@@ -35,7 +35,9 @@ export class ProductCardComponent {
     createdDate: new Date(),
   };
 
-  switchFav() {
+  switchFav(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
     this.productService.switchFav(this.product);
   }
 }
