@@ -20,6 +20,7 @@
     "@ng-icons/core": "^30.2.0",
     "@ng-icons/font-awesome": "^30.2.0",
     "@ng-icons/heroicons": "^30.2.0",
+    "latest": "^0.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

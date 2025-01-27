@@ -128,6 +128,13 @@ export class ProductService {
   getFavoriteCount(): number {
     return this.products.filter((p) => p.isFavorite).length;
   }
+  totalShoppingCart(list: number[]): number {
+    let total = 0;
+    for (const i of list) {
+      total += this.products[i].price;
+    }
+    return total; 
+  }
 
   clearFavorites(): void {
     this.products.forEach((product) => {
