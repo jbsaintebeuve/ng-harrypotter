@@ -1,0 +1,55 @@
+<div class="container mx-auto px-4 py-6">
+    <!-- Cart Item -->
+    <div class="flex items-center justify-between bg-white shadow-md rounded-lg p-4 mb-4">
+      <!-- Product Image -->
+      <div class="w-20 h-20 rounded overflow-hidden border border-gray-200">
+        <img
+          src="https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Begrippenlijst.svg"
+          alt="Cardigan"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <!-- Product Details -->
+      <div class="flex-1 ml-6">
+        <p class="text-lg font-semibold text-gray-800">{{name}}</p>
+      </div>
+      <!-- Quantity Controls -->
+      <div class="flex items-center space-x-2">
+        <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full transition" (click)="quantityChangeminus()">
+          -
+        </button>
+        <input
+          id="qte"
+          type="number"
+          value="{{qte}}"
+          class="w-12 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full transition" (click)="quantityChangeplus()">
+          +
+        </button>
+      </div>
+      <!-- Price -->
+      <p id="price" class="text-lg font-bold text-gray-800 ml-4">
+        ${{total}}
+      </p>
+      <!-- Remove Button -->
+      <button
+        class="text-red-500 hover:text-red-600 flex items-center ml-6 transition" 
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-1"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M6 3a1 1 0 011-1h6a1 1 0 011 1v1h3a1 1 0 110 2h-1v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6H2a1 1 0 110-2h3V3zm2 3a1 1 0 00-1 1v7a1 1 0 102 0V7a1 1 0 00-1-1zm5 0a1 1 0 00-1 1v7a1 1 0 102 0V7a1 1 0 00-1-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Remove
+      </button>
+    </div>
+  </div>
+  

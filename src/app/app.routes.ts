@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
 import { ProductGridComponent } from './components/product-grid/product-grid.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
-import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
-
+import { ShoppingCartComponentItem } from './components/shopping-cart-item/shopping-cart-item.component';
 export const routes: Routes = [
   {
     path: '',
@@ -15,8 +14,8 @@ export const routes: Routes = [
     component: ProductDetailComponent,
   },
   {
-    path: 'shopping-cart',
+    path: 'shopping-cart-item',
     title: 'ShoppingCart',
-    component: ShoppingCartComponent,
+    component: ShoppingCartComponentItem,
   },
 ];
