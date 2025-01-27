@@ -39,7 +39,7 @@ import { SidePanelService } from './services/side-panel.service';
   styles: [],
 })
 export class AppComponent {
-  title = 'ng-pokeshop';
+  title = 'ng-harrypotter';
   searchTerm: string = '';
 
   constructor(public sidePanelService: SidePanelService) {}
