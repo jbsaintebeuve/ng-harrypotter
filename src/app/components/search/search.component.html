@@ -1,0 +1,7 @@
+<input
+  class="border border-neutral-300 px-4 py-2 w-full rounded-md shadow-sm shadow-neutral-200 outline-none"
+  type="search"
+  placeholder="Rechercher une carte..."
+  [(ngModel)]="searchTerm"
+  (ngModelChange)="onSearch($event)"
+/>
