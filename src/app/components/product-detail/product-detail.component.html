@@ -1,0 +1,30 @@
+<div class="w-1/2 mx-auto mb-4">
+  <div
+    class="border border-neutral-300 bg-neutral-50 p-5 rounded-md shadow-sm shadow-neutral-200"
+  >
+    <div class="flex justify-between items-center">
+      <h1 class="font-bold text-xl text-neutral-700">
+        {{ product.name | uppercase }}
+      </h1>
+      @if (product.isFavorite) {
+      <ng-icon
+        (click)="switchFav()"
+        class="text-xl text-neutral-700 hover:cursor-pointer select-none"
+        name="faSolidHeart"
+      />
+      } @else {
+      <ng-icon
+        (click)="switchFav()"
+        class="text-xl text-neutral-600 hover:cursor-pointer select-none"
+        name="faHeart"
+      />
+      }
+    </div>
+    <p class="text-sm text-neutral-500">
+      {{ product.createdDate | date : 'fullDate' : '' : 'fr' }}
+    </p>
+    <p class="text-xl font-bold text-neutral-800 w-full text-right">
+      {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
+    </p>
+  </div>
+</div>

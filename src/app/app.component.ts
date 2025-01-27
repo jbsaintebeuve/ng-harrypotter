@@ -15,8 +15,8 @@ import { SidePanelService } from './services/side-panel.service';
     CommonModule,
     RouterOutlet,
     HeaderComponent,
-    ProductGridComponent,
-    SearchComponent,
+    // ProductGridComponent,
+    // SearchComponent,
     FooterComponent,
     SidePanelComponent,
   ],
@@ -24,10 +24,7 @@ import { SidePanelService } from './services/side-panel.service';
     <div class="flex flex-col gap-8 min-h-screen">
       <app-header />
       <main class="flex flex-col gap-4">
-        <div class="w-1/2 mx-auto">
-          <app-search (changeSearchEvent)="onSearch($event)" />
-        </div>
-        <app-product-grid [searchTerm]="searchTerm" />
+        <!-- <app-product-grid [searchTerm]="searchTerm" /> -->
         <router-outlet />
       </main>
       <app-footer />
@@ -43,8 +40,4 @@ export class AppComponent {
   searchTerm: string = '';
 
   constructor(public sidePanelService: SidePanelService) {}
-
-  onSearch(term: string) {
-    this.searchTerm = term;
-  }
 }

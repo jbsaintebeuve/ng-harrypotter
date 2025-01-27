@@ -116,6 +116,9 @@ export class ProductService {
   getProducts() {
     return this.products;
   }
+  getProduct(id: number) {
+    return this.products.find((p) => p.id === id);
+  }
 
   addProduct(id: number) {
     this.products[id];

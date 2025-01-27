@@ -3,11 +3,12 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidHeart } from '@ng-icons/font-awesome/solid';
 import { ProductService } from '../../services/product.service';
 import { SidePanelService } from '../../services/side-panel.service';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgIconComponent],
+  imports: [NgIconComponent, RouterLink],
   providers: [provideIcons({ faSolidHeart })],
   templateUrl: './header.component.html',
   styles: ``,
