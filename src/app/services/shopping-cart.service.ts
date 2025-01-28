@@ -14,10 +14,21 @@ export class ShoppingCartService {
   }
 
   addToCart(productId: number, quantity: number) {
-    const new_prod: ShoppingCartProduct = { id: productId, quantity: quantity };
-    this.cart.stock.push(new_prod);
+    const storedCart = localStorage.getItem('shoppingCart');
+    if (storedCart) {
+      this.cart = JSON.parse(storedCart);
+    }
+    if (this.cart.stock.find((p: ShoppingCartProduct) => p.id === productId)) {
+      this.changeQuantity(productId, quantity);
+    } else {
+      const new_prod: ShoppingCartProduct = {
+        id: productId,
+        quantity: quantity,
+      };
+      this.cart.stock.push(new_prod);
+    }
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
-    this.totalCart();
+      this.totalCart();
   }
   removeFromCart(productId: number) {
     this.cart.stock = this.cart.stock.filter(

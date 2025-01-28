@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Product } from '../../interfaces/product';
 import { Input } from '@angular/core';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
 import {
   ShoppingCartProduct,
   ShoppingCart,
@@ -17,10 +18,12 @@ import { faSolidImage, faSolidTrash } from '@ng-icons/font-awesome/solid';
   styles: ``,
 })
 export class ShoppingCartComponentItem {
+  constructor(private shoppingCartService: ShoppingCartService) {}
   @Input({ required: true }) product: ShoppingCartProduct = {
     id: 0,
     quantity: 0,
   };
+  @Input() quantityChange = 0;
   // name: String = this.product.name;
   // price: number = this.product.price * this.qte;
   data = localStorage.getItem('ng_hp_cart');
@@ -30,31 +33,18 @@ export class ShoppingCartComponentItem {
 
   @Output() addItemEvent = new EventEmitter<number>();
 
-  addToCart(product: Product) {
-    // Add the product to the cart
-    this.cart = [...this.cart, product];
-
-    // Update the total price
-    //this.total = this.cart.reduce((sum, p) => sum + p.price, 0);
-
-    // Update the localStorage after adding the product
-    localStorage.setItem('ng_hp_cart', JSON.stringify(this.cart));
+  addToCart() {
+    this.shoppingCartService.addToCart(this.product.id, this.quantityChange);
+    console.log('Product added to cart');
   }
-
-  removeFromCart(product: Product) {
-    // Filter out the product to remove it from the cart
-    this.cart = this.cart.filter((p: Product) => p.id !== product.id);
-
-    // Update the total price
-    //this.total = this.cart.reduce((sum, p) => sum + p.price, 0);
-
-    // Update the localStorage after removing the product
-    localStorage.setItem('ng_hp_cart', JSON.stringify(this.cart));
+  removeFromCart() {
+    this.shoppingCartService.removeFromCart(this.product.id);
+    console.log('Product removed from cart');
   }
-  // quantityChangeplus() {
-  //   this.qte = this.qte++;
-  // }
-  // quantityChangeminus() {
-  //   this.qte = this.qte--;
-  // }
+  changeQuantity() {
+    this.shoppingCartService.changeQuantity(this.product.id, this.quantityChange);
+    console.log('Quantity changed');
+  }
+  
+  
 }
