@@ -27,4 +27,9 @@ export class QuantitySelectorComponent {
       this.quantityChange.emit(this.quantity);
     }
   }
+
+  getQuantity() {
+    this.quantityChange.emit(this.quantity);
+    return this.quantity;
+  }
 }

@@ -30,7 +30,7 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
   styles: ``,
 })
 export class ProductDetailComponent {
-  @Input() quantityChange = 0;
+ quantity = 1;
   product!: Product;
   constructor(
     private productService: ProductService,
@@ -47,10 +47,12 @@ export class ProductDetailComponent {
     });
   }
   addToCart() {
-    this.shoppingCartService.addToCart(this.product.id, this.quantityChange);
+    this.shoppingCartService.addToCart(this.product.id, this.quantity);
     console.log('Product added to cart');
   }
-
+  onChangeQuantity(value: number) {
+    this.quantity = value;
+  }
   switchFav() {
     this.productService.switchFav(this.product);
   }
