@@ -4,6 +4,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { FavorisListComponent } from './components/favoris-list/favoris-list.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { CartFormComponent } from './components/cart-form/cart-form.component';
+import { PageErrorComponent } from './components/page-error/page-error.component';
 export const routes: Routes = [
   {
     path: '',
@@ -29,5 +30,10 @@ export const routes: Routes = [
     path: 'panier/informations',
     title: 'Form',
     component: CartFormComponent,
+  },
+  {
+    path: '**',
+    title: 'Erreur 404',
+    component: PageErrorComponent,
   },
 ];

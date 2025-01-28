@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Product } from '../../interfaces/product';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
@@ -49,6 +49,7 @@ export class CartFormComponent {
   constructor(
     private shoppingCartService: ShoppingCartService,
     private fb: FormBuilder,
+    private router: Router,
   ) {
     this.checkoutForm = this.fb.group({
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -64,6 +65,10 @@ export class CartFormComponent {
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
     this.cart.total_price = this.shoppingCartService.totalCart();
+
+    if (this.cart.stock.length === 0) {
+      this.router.navigate(['/panier']);
+    }
   }
 
   onCartUpdate() {
