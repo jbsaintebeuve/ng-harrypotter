@@ -4,13 +4,16 @@ import { ShoppingCart, ShoppingCartProduct } from '../interfaces/shopping-cart';
   providedIn: 'root',
 })
 export class ShoppingCartService {
+ 
+
   cart: ShoppingCart = {
     total_price: 0,
     stock: [],
-  };
+  } ;
 
   getCart(): ShoppingCart {
-    return this.cart;
+    this.cart = JSON.parse(localStorage.getItem('shoppingCart') || '{}');
+    return  this.cart;
   }
 
   addToCart(productId: number, quantity: number) {
@@ -41,7 +44,8 @@ export class ShoppingCartService {
     const index = this.cart.stock.findIndex(
       (p: ShoppingCartProduct) => p.id === productId,
     );
-    if (index !== -1) {
+    if (index > -1) {
+      console.log('onchange success index', index);
       this.cart.stock[index].quantity = quantity;
     }
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));

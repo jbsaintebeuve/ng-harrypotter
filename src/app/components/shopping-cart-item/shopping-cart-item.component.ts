@@ -34,6 +34,7 @@ export class ShoppingCartComponentItem implements OnInit {
     price: 0,
     createdDate: new Date(),
   };
+  quantity = 1;
 
   // name: String = this.product.name;
   // price: number = this.product.price * this.qte;
@@ -49,13 +50,13 @@ export class ShoppingCartComponentItem implements OnInit {
   ngOnInit(): void {
     const fetchedProduct = this.productService.getProduct(this.item.id);
     this.product = fetchedProduct ? fetchedProduct : this.product;
+    this.quantity = this.item.quantity;
   }
 
   get price(): number {
+    console.log(this.product.price * this.item.quantity);
+    
     return this.product.price * this.item.quantity;
-  }
-  addToCart() {
-    this.ShoppingCartService.addToCart(this.product.id, this.item.quantity);
   }
   changeQuantity(value: number) {
     this.ShoppingCartService.changeQuantity(this.product.id, value);
@@ -65,6 +66,7 @@ export class ShoppingCartComponentItem implements OnInit {
   }
   onChangeQuantity(value: number) {
     this.item.quantity = value;
+    this.ShoppingCartService.changeQuantity(this.product.id, value);
   }
 
 }
