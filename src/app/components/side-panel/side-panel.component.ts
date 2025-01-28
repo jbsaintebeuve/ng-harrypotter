@@ -6,11 +6,14 @@ import { Product } from '../../interfaces/product';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
+import { ShoppingCart } from '../../interfaces/shopping-cart';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
 
 @Component({
   selector: 'app-side-panel',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, NgIconComponent],
+  imports: [CommonModule, NgIconComponent, ShoppingCartComponentItem],
   providers: [provideIcons({ faSolidCartShopping })],
   templateUrl: './side-panel.component.html',
   styleUrls: ['./side-panel.component.css'],
@@ -18,18 +21,27 @@ import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
 export class SidePanelComponent {
   constructor(
     public sidePanelService: SidePanelService,
-    public productService: ProductService,
+    private shoppingCartService: ShoppingCartService,
   ) {}
 
-  get favoriteCount(): number {
-    return this.productService.getFavoriteCount();
-  }
+  cart: ShoppingCart = {
+    total_price: 0,
+    stock: [
+      // { id: 4, quantity: 2 },
+      // { id: 2, quantity: 10 },
+    ],
+  };
 
-  get favoriteProducts(): Product[] {
-    return this.productService.products.filter((p) => p.isFavorite);
-  }
+  product: Product = {
+    id: 0,
+    name: 'test',
+    isFavorite: false,
+    price: 100,
+    createdDate: new Date(),
+  };
 
   ngOnInit() {
+    this.cart = this.shoppingCartService.getCart();
     setTimeout(() => {
       const hostElement = document.querySelector('app-side-panel');
       hostElement?.classList.add('open');
@@ -44,7 +56,11 @@ export class SidePanelComponent {
     }, 300);
   }
 
-  clearFavorites() {
-    this.productService.clearFavorites();
+  onCartUpdate() {
+    this.cart = this.shoppingCartService.getCart();
+  }
+
+  clearCart() {
+    this.cart = this.shoppingCartService.clearCart();
   }
 }

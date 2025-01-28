@@ -1,6 +1,6 @@
-<div class="flex flex-col gap-4 p-4 w-1/2 mx-auto">
+<div class="flex flex-col gap-4 w-5/6 mb-10 mx-auto">
   <div class="flex gap-4 items-center mb-4">
-    <h2 class="text-2xl font-bold">Favoris</h2>
+    <h1 class="font-bold text-4xl text-neutral-700">Favoris</h1>
     @if (favoriteCount > 0) {
     <p class="text-sm text-neutral-400">{{ favoriteCount }} favoris</p>
     }
@@ -25,5 +25,5 @@
   </button>
 </div>
 } @else {
-<p class="text-center text-neutral-500">Aucun favoris</p>
+<p class="text-center text-neutral-500 mt-4">Aucun favoris</p>
 }

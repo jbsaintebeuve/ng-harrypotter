@@ -3,6 +3,7 @@ import { ProductGridComponent } from './components/product-grid/product-grid.com
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { FavorisListComponent } from './components/favoris-list/favoris-list.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { CartFormComponent } from './components/cart-form/cart-form.component';
 export const routes: Routes = [
   {
     path: '',
@@ -15,7 +16,7 @@ export const routes: Routes = [
     component: ProductDetailComponent,
   },
   {
-    path: 'shopping-cart',
+    path: 'panier',
     title: 'ShoppingCart',
     component: ShoppingCartComponent,
   },
@@ -23,5 +24,10 @@ export const routes: Routes = [
     path: 'favoris',
     title: 'Favoris',
     component: FavorisListComponent,
+  },
+  {
+    path: 'panier/informations',
+    title: 'Form',
+    component: CartFormComponent,
   },
 ];

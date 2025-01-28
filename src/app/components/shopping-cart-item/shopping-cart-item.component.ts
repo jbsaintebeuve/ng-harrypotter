@@ -22,6 +22,7 @@ import { ShoppingCartService } from '../../services/shopping-cart.service';
   styles: ``,
 })
 export class ShoppingCartComponentItem implements OnInit {
+  @Input() minimized = false;
   @Input({ required: true }) item: ShoppingCartProduct = {
     id: 0,
     quantity: 0,
@@ -35,13 +36,9 @@ export class ShoppingCartComponentItem implements OnInit {
     createdDate: new Date(),
   };
   quantity = 1;
-
-  // name: String = this.product.name;
-  // price: number = this.product.price * this.qte;
   data = localStorage.getItem('ng_hp_cart');
   products: Product[] = this.data ? JSON.parse(this.data) : [];
   cart: Product[] = [...this.products];
-  // total: String = this.price + '€';
 
   @Output() addItemEvent = new EventEmitter<number>();
   @Output() cartUpdated = new EventEmitter<void>();

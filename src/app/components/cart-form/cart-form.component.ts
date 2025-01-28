@@ -1,29 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormInputComponent } from '../form-input/form-input.component';
+import { CurrencyPipe, NgFor } from '@angular/common';
 import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { Product } from '../../interfaces/product';
-import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { faSolidTrash } from '@ng-icons/font-awesome/solid';
-import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-shopping-cart',
+  selector: 'app-cart-form',
   standalone: true,
   imports: [
+    FormInputComponent,
     ShoppingCartComponentItem,
-    NgIconComponent,
-    NgFor,
     CurrencyPipe,
     RouterLink,
   ],
-  providers: [provideIcons({ faSolidTrash })],
-  templateUrl: './shopping-cart.component.html',
+  templateUrl: './cart-form.component.html',
   styles: ``,
 })
-export class ShoppingCartComponent implements OnInit {
+export class CartFormComponent {
   cart: ShoppingCart = {
     total_price: 0,
     stock: [
