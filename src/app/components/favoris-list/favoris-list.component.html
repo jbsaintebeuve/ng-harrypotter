@@ -6,7 +6,9 @@
     }
   </div>
   @for (product of favoriteProducts; track product.id) {
-  <app-product-card [product]="product" />
+  <a routerLink="/product/{{ product.id }}">
+    <app-product-card [product]="product" />
+  </a>
   }
 </div>
 

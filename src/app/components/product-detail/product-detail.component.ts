@@ -12,6 +12,7 @@ import {
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faHeart } from '@ng-icons/font-awesome/regular';
 import { faSolidHeart, faSolidImage } from '@ng-icons/font-awesome/solid';
+import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,6 +23,7 @@ import { faSolidHeart, faSolidImage } from '@ng-icons/font-awesome/solid';
     UpperCasePipe,
     DatePipe,
     NgIconComponent,
+    QuantitySelectorComponent,
   ],
   providers: [provideIcons({ faHeart, faSolidHeart, faSolidImage })],
   templateUrl: './product-detail.component.html',
