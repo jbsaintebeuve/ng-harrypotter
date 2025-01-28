@@ -6,11 +6,12 @@ import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { Product } from '../../interfaces/product';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidTrash } from '@ng-icons/font-awesome/solid';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [ShoppingCartComponentItem, NgIconComponent, NgFor],
+  imports: [ShoppingCartComponentItem, NgIconComponent, NgFor,CurrencyPipe],
   providers: [provideIcons({ faSolidTrash })],
   templateUrl: './shopping-cart.component.html',
   styles: ``,
@@ -36,10 +37,13 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
+    this.cart.total_price = this.shoppingCartService.totalCart();
   }
 
   onCartUpdate() {
+    
     this.cart = this.shoppingCartService.getCart();
+    this.cart.total_price = this.shoppingCartService.totalCart();
   }
 
   clearCart() {

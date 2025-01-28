@@ -22,4 +22,7 @@
     *ngFor="let item of cart.stock"
   >
   </app-shopping-cart-item>
+<div class="flex justify-end items-center mt-4">
+    <p class="text-lg font-bold">Total: {{ cart.total_price|  currency : 'EUR' : true : '' : 'fr'  }}</p>
+</div>
 </div>

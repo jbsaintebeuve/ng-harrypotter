@@ -17,7 +17,11 @@
     </div>
   </div>
   <div class="flex items-center justify-center gap-4">
-    <app-quantity-selector [quantity]="quantity" (quantityChange)="onChangeQuantity($event)"></app-quantity-selector>    <button
+    <app-quantity-selector
+      [quantity]="quantity"
+      (quantityChange)="onChangeQuantity($event)"
+    ></app-quantity-selector>
+    <button
       class="text-neutral-500 hover:text-neutral-600 flex items-center gap-1 text-xs"
       (click)="removeFromCart()"
     >

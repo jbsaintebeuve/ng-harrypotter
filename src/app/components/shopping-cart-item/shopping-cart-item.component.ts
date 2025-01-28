@@ -58,8 +58,6 @@ export class ShoppingCartComponentItem implements OnInit {
   }
 
   get price(): number {
-    console.log(this.product.price * this.item.quantity);
-
     return this.product.price * this.item.quantity;
   }
   changeQuantity(value: number) {

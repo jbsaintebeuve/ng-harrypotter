@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ShoppingCart, ShoppingCartProduct } from '../interfaces/shopping-cart';
-
+import { ProductService } from './product.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -16,12 +16,18 @@ export class ShoppingCartService {
   }
 
   addToCart(productId: number, quantity: number) {
+    let car_quantity: number | undefined;
     const storedCart = localStorage.getItem('shoppingCart');
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     }
+    // Check if product is already in cart
     if (this.cart.stock.find((p: ShoppingCartProduct) => p.id === productId)) {
-      this.changeQuantity(productId, quantity);
+      car_quantity = this.cart.stock.find(
+        (p: ShoppingCartProduct) => p.id === productId,
+      )?.quantity;
+      car_quantity = car_quantity ? car_quantity : 0;
+      this.changeQuantity(productId, quantity + car_quantity);
     } else {
       const new_prod: ShoppingCartProduct = {
         id: productId,
@@ -47,7 +53,6 @@ export class ShoppingCartService {
       (p: ShoppingCartProduct) => p.id === productId,
     );
     if (index > -1) {
-      console.log('onchange success index', index);
       this.cart.stock[index].quantity = quantity;
     }
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
@@ -60,17 +65,26 @@ export class ShoppingCartService {
       stock: [],
     };
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
+    this.totalCart();
     return this.cart;
   }
 
   totalCart() {
+    const storedCart = localStorage.getItem('shoppingCart');
+    if (storedCart) {
+      this.cart = JSON.parse(storedCart);
+    }
     let total = 0;
+    let price_item = 0;
     this.cart.stock.forEach((p: ShoppingCartProduct) => {
-      total += p.quantity;
+      if (this.cart.stock.length > 0 && p.id) {
+        price_item = this.productService.getProduct(p.id)?.price || 0;
+        total += price_item * p.quantity;
+      }
     });
     this.cart.total_price = total;
     return total;
   }
 
-  constructor() {}
+  constructor(private productService: ProductService) {}
 }
