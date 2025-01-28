@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { SidePanelService } from '../../services/side-panel.service';
 import {
   CurrencyPipe,
   DatePipe,
@@ -30,12 +31,13 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
   styles: ``,
 })
 export class ProductDetailComponent {
- quantity = 1;
+  quantity = 1;
   product!: Product;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private shoppingCartService: ShoppingCartService,
+    private sidePanelService: SidePanelService,
   ) {
     this.route.params.subscribe((params) => {
       const product = this.productService.getProduct(parseInt(params['id']));
@@ -48,6 +50,7 @@ export class ProductDetailComponent {
   }
   addToCart() {
     this.shoppingCartService.addToCart(this.product.id, this.quantity);
+    this.sidePanelService.open(true);
     console.log('Product added to cart');
   }
   onChangeQuantity(value: number) {

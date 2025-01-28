@@ -18,12 +18,6 @@
     (click)="openSidePanel()"
     class="bg-neutral-200 rounded-md px-4 py-2 flex items-center"
   >
-    @if (cart.stock.length > 0) {
-    <span
-      class="absolute right-3 top-2 text-white font-bold bg-red-500 rounded-xl px-2 text-xs"
-      >{{ cart.stock.length }}</span
-    >
-    }
     <ng-icon name="faSolidCartShopping" class="text-neutral-700" />
   </button>
 </header>

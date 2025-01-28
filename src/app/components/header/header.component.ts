@@ -15,19 +15,8 @@ import { ShoppingCart } from '../../interfaces/shopping-cart';
   templateUrl: './header.component.html',
   styles: ``,
 })
-export class HeaderComponent implements OnInit {
-  constructor(
-    public sidePanelService: SidePanelService,
-    public shoppingCartService: ShoppingCartService,
-  ) {}
-
-  cart: ShoppingCart = {
-    total_price: 0,
-    stock: [],
-  };
-  ngOnInit() {
-    this.cart = this.shoppingCartService.getCart();
-  }
+export class HeaderComponent {
+  constructor(public sidePanelService: SidePanelService) {}
 
   openSidePanel() {
     this.sidePanelService.toggle();

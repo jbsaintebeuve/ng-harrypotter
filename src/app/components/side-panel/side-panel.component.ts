@@ -9,11 +9,17 @@ import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
 import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-side-panel',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, ShoppingCartComponentItem],
+  imports: [
+    CommonModule,
+    NgIconComponent,
+    ShoppingCartComponentItem,
+    RouterLink,
+  ],
   providers: [provideIcons({ faSolidCartShopping })],
   templateUrl: './side-panel.component.html',
   styleUrls: ['./side-panel.component.css'],
@@ -62,5 +68,9 @@ export class SidePanelComponent {
 
   clearCart() {
     this.cart = this.shoppingCartService.clearCart();
+  }
+
+  closePanel() {
+    this.sidePanelService.close();
   }
 }

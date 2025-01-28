@@ -30,9 +30,12 @@
       <p class="text-2xl font-bold text-neutral-800 w-full">
         {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
       </p>
-      <app-quantity-selector [quantity]="quantity" (quantityChange)="onChangeQuantity($event)"></app-quantity-selector>
+      <app-quantity-selector
+        [quantity]="quantity"
+        (quantityChange)="onChangeQuantity($event)"
+      ></app-quantity-selector>
       <button
-        class="bg-neutral-600 text-neutral-200 w-4/6 text-center py-2 rounded-sm"
+        class="bg-neutral-800 text-white px-4 py-3 mt-2 w-full text-sm rounded-md font-semibold text-center hover:cursor-pointer hover:bg-neutral-900"
         (click)="addToCart()"
       >
         Ajouter au panier
