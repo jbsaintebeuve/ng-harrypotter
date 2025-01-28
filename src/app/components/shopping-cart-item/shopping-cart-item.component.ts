@@ -6,6 +6,7 @@ import { Product } from '../../interfaces/product';
 import { ShoppingCartProduct } from '../../interfaces/shopping-cart';
 import { ProductService } from '../../services/product.service';
 import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
 @Component({
   selector: 'app-shopping-cart-item',
   standalone: true,
@@ -43,42 +44,27 @@ export class ShoppingCartComponentItem implements OnInit {
 
   @Output() addItemEvent = new EventEmitter<number>();
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private ShoppingCartService : ShoppingCartService) {}
 
   ngOnInit(): void {
     const fetchedProduct = this.productService.getProduct(this.item.id);
     this.product = fetchedProduct ? fetchedProduct : this.product;
   }
 
-  addToCart(product: Product) {
-    // Add the product to the cart
-    this.cart = [...this.cart, product];
-
-    // Update the total price
-    //this.total = this.cart.reduce((sum, p) => sum + p.price, 0);
-
-    // Update the localStorage after adding the product
-    localStorage.setItem('ng_hp_cart', JSON.stringify(this.cart));
-  }
-
   get price(): number {
     return this.product.price * this.item.quantity;
   }
-
-  removeFromCart(product: Product) {
-    // Filter out the product to remove it from the cart
-    this.cart = this.cart.filter((p: Product) => p.id !== product.id);
-
-    // Update the total price
-    //this.total = this.cart.reduce((sum, p) => sum + p.price, 0);
-
-    // Update the localStorage after removing the product
-    localStorage.setItem('ng_hp_cart', JSON.stringify(this.cart));
+  addToCart() {
+    this.ShoppingCartService.addToCart(this.product.id, this.item.quantity);
   }
-  // quantityChangeplus() {
-  //   this.qte = this.qte++;
-  // }
-  // quantityChangeminus() {
-  //   this.qte = this.qte--;
-  // }
+  changeQuantity(value: number) {
+    this.ShoppingCartService.changeQuantity(this.product.id, value);
+  }
+  removeFromCart() {
+    this.ShoppingCartService.removeFromCart(this.product.id);
+  }
+  onChangeQuantity(value: number) {
+    this.item.quantity = value;
+  }
+
 }
