@@ -1,9 +1,20 @@
 <div class="flex flex-col gap-2 w-full">
   <label class="text-sm">{{ label }}</label>
   <input
-    class="p-2 border border-gray-300 rounded text-xs bg-neutral-100 w-full"
-    type="{{ type }}"
-    value=""
-    placeholder="{{ placeholder }}"
+    [ngClass]="{
+      'border-red-500 focus:border-red-500': isInvalid,
+      'border-gray-300': !isInvalid
+    }"
+    class="p-2 border rounded text-xs bg-neutral-100 w-full outline-none"
+    [type]="type"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [value]="value"
+    [name]="name"
+    (input)="onInputChange($event)"
+    (blur)="onTouched()"
   />
+  @if (isInvalid) {
+  <span class="text-red-500 text-xs">{{ errorMessage }}</span>
+  }
 </div>

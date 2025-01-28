@@ -1,11 +1,17 @@
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormInputComponent } from '../form-input/form-input.component';
-import { CurrencyPipe, NgFor } from '@angular/common';
-import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
-import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { ShoppingCart } from '../../interfaces/shopping-cart';
-import { Product } from '../../interfaces/product';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Product } from '../../interfaces/product';
+import { ShoppingCart } from '../../interfaces/shopping-cart';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { FormInputComponent } from '../form-input/form-input.component';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 
 @Component({
   selector: 'app-cart-form',
@@ -15,6 +21,8 @@ import { RouterLink } from '@angular/router';
     ShoppingCartComponentItem,
     CurrencyPipe,
     RouterLink,
+    ReactiveFormsModule,
+    NgClass,
   ],
   templateUrl: './cart-form.component.html',
   styles: ``,
@@ -36,7 +44,22 @@ export class CartFormComponent {
     createdDate: new Date(),
   };
 
-  constructor(private shoppingCartService: ShoppingCartService) {}
+  checkoutForm: FormGroup;
+
+  constructor(
+    private shoppingCartService: ShoppingCartService,
+    private fb: FormBuilder,
+  ) {
+    this.checkoutForm = this.fb.group({
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      address: ['', Validators.required],
+      zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
+      city: ['', Validators.required],
+    });
+  }
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
@@ -50,5 +73,15 @@ export class CartFormComponent {
 
   clearCart() {
     this.cart = this.shoppingCartService.clearCart();
+  }
+
+  get isInvalid(): boolean {
+    return !this.checkoutForm.valid;
+  }
+
+  onSubmit() {
+    if (this.checkoutForm.valid) {
+      console.log('Form submitted', this.checkoutForm.value);
+    }
   }
 }

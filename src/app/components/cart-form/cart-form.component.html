@@ -4,76 +4,100 @@
     class="text-sm font-medium text-gray-500 hover:text-gray-600 hover:cursor-pointer"
     >Retour au panier</a
   >
-  <div class="grid grid-cols-3 gap-10">
-    <div class="flex flex-col gap-4 col-span-2">
-      <p class="font-semibold text-normal">Informations personnelles</p>
-      <div class="grid grid-cols-2 gap-4 w-full">
+  <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-3 gap-10">
+      <div class="flex flex-col gap-4 col-span-2">
+        <p class="font-semibold text-normal">Informations personnelles</p>
+        <div class="grid grid-cols-2 gap-4 w-full">
+          <app-form-input
+            label="Nom"
+            type="text"
+            name="lastName"
+            placeholder="Entrer votre nom"
+            formControlName="lastName"
+          ></app-form-input>
+
+          <app-form-input
+            label="Prénom"
+            type="text"
+            name="firstName"
+            placeholder="Entrer votre prénom"
+            formControlName="firstName"
+          ></app-form-input>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 w-full">
+          <app-form-input
+            label="Email"
+            type="email"
+            name="email"
+            placeholder="Entrer votre email"
+            formControlName="email"
+          ></app-form-input>
+
+          <app-form-input
+            label="Téléphone"
+            type="tel"
+            name="phone"
+            placeholder="Entrer votre téléphone"
+            formControlName="phone"
+          ></app-form-input>
+        </div>
+
+        <p class="font-semibold text-normal">Adresse de livraison</p>
         <app-form-input
-          label="Nom"
+          label="Adresse"
           type="text"
-          placeholder="Entrer votre nom"
+          name="address"
+          placeholder="Entrer votre adresse"
+          formControlName="address"
         ></app-form-input>
 
-        <app-form-input
-          label="Prénom"
-          type="text"
-          placeholder="Entrer votre prénom"
-        ></app-form-input>
+        <div class="grid grid-cols-2 gap-4 w-full">
+          <app-form-input
+            label="Code postal"
+            type="text"
+            name="zipCode"
+            placeholder="Entrer votre code postal"
+            formControlName="zipCode"
+          ></app-form-input>
+
+          <app-form-input
+            label="Ville"
+            type="text"
+            name="city"
+            placeholder="Entrer votre ville"
+            formControlName="city"
+          ></app-form-input>
+        </div>
       </div>
-
-      <div class="grid grid-cols-2 gap-4 w-full">
-        <app-form-input
-          label="Email"
-          type="email"
-          placeholder="Entrer votre email"
-        ></app-form-input>
-
-        <app-form-input
-          label="Téléphone"
-          type="tel"
-          placeholder="Entrer votre téléphone"
-        ></app-form-input>
-      </div>
-
-      <p class="font-semibold text-normal">Adresse de livraison</p>
-      <app-form-input
-        label="Adresse"
-        type="text"
-        placeholder="Entrer votre adresse"
-      ></app-form-input>
-
-      <div class="grid grid-cols-2 gap-4 w-full">
-        <app-form-input
-          label="Code postal"
-          type="text"
-          placeholder="Entrer votre code postal"
-        ></app-form-input>
-
-        <app-form-input
-          label="Ville"
-          type="text"
-          placeholder="Entrer votre ville"
-        ></app-form-input>
-      </div>
-    </div>
-    <div>
-      <p class="font-semibold text-normal mb-4">Récapitulatif de la commande</p>
-      @for (item of cart.stock; track $index) {
-      <app-shopping-cart-item
-        [item]="item"
-        [minimized]="true"
-      ></app-shopping-cart-item>
-      }
-      <div class="flex justify-between items-center my-4">
-        <p class="text-lg font-bold">
-          Total: {{ cart.total_price | currency : 'EUR' : true : '' : 'fr' }}
+      <div>
+        <p class="font-semibold text-normal mb-4">
+          Récapitulatif de la commande
         </p>
+        @for (item of cart.stock; track $index) {
+        <app-shopping-cart-item
+          [item]="item"
+          [minimized]="true"
+        ></app-shopping-cart-item>
+        }
+        <div class="flex justify-between items-center my-4">
+          <p class="text-lg font-bold">
+            Total: {{ cart.total_price | currency : 'EUR' : true : '' : 'fr' }}
+          </p>
+        </div>
+        <button
+          type="submit"
+          [disabled]="!checkoutForm.valid"
+          class="px-4 py-3 text-sm rounded-md w-full font-semibold"
+          [ngClass]="{
+            'bg-neutral-400 cursor-not-allowed text-neutral-100': isInvalid,
+            'bg-neutral-800 cursor-pointer text-white': !isInvalid
+          }"
+        >
+          Continuer vers le paiement
+        </button>
       </div>
-      <button
-        class="bg-neutral-800 text-white px-4 py-3 text-sm rounded-md w-full font-semibold"
-      >
-        Continuer vers le paiement
-      </button>
     </div>
-  </div>
+  </form>
 </div>
