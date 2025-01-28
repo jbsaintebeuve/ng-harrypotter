@@ -14,7 +14,10 @@ import { Product } from '../../interfaces/product';
 export class ShoppingCartComponent implements OnInit {
   cart: ShoppingCart = {
     total_price: 0,
-    stock: [],
+    stock: [
+      // { id: 4, quantity: 2 },
+      // { id: 2, quantity: 10 },
+    ],
   };
 
   product: Product = {
