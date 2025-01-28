@@ -1,1 +1,3 @@
-<p>success</p>
+@for (product of cart.stock; track $index) {
+<app-shopping-cart-item [product]="product"></app-shopping-cart-item>
+}

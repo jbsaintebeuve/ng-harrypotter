@@ -1,35 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { Product } from '../../interfaces/product';
-import { Input } from '@angular/core';
+
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [],
+  imports: [ShoppingCartComponentItem],
   templateUrl: './shopping-cart.component.html',
-  styles: ``
+  styles: ``,
 })
-export class ShoppingCartComponent {
-  @Input({ required: true }) product: Product = {
+export class ShoppingCartComponent implements OnInit {
+  cart: ShoppingCart = {
+    total_price: 0,
+    stock: [],
+  };
+
+  product: Product = {
     id: 0,
-    name: '',
+    name: 'test',
     isFavorite: false,
-    price: 0,
+    price: 100,
     createdDate: new Date(),
   };
-  data = localStorage.getItem('ng_hp_cart');
-  products: Product[] = this.data ? JSON.parse(this.data) : [];
-  cart: Product[] = [...this.products];
-  total: number = this.cart.reduce((sum, product) => sum + product.price, 0);
-  qte: number = 1;
 
-  removeFromCart(product: Product) {
-    // Filter out the product to remove it from the cart
-    this.cart = this.cart.filter((p: Product) => p.id !== product.id);
-  
-    // Update the total price
-    this.total = this.cart.reduce((sum, p) => sum + p.price, 0);
-  
-    // Update the localStorage after removing the product
-    localStorage.setItem('ng_hp_cart', JSON.stringify(this.cart));
-  }  
+  constructor(private shoppingCartService: ShoppingCartService) {}
+
+  ngOnInit() {
+    this.cart = this.shoppingCartService.getCart();
+  }
 }

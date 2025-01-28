@@ -1,9 +1,9 @@
-export interface Produit {
-  id: number;
-  quantite: number;
-}
-
 export interface ShoppingCart {
   total_price: number;
-  stock: Produit[];
+  stock: ShoppingCartProduct[];
+}
+
+export interface ShoppingCartProduct {
+  id: number;
+  quantity: number;
 }
