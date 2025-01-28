@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
-
+import { ShoppingCartService } from '../../services/shopping-cart.service';
 import {
   CurrencyPipe,
   DatePipe,
@@ -30,10 +30,12 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
   styles: ``,
 })
 export class ProductDetailComponent {
+  @Input() quantityChange = 0;
   product!: Product;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
+    private shoppingCartService: ShoppingCartService,
   ) {
     this.route.params.subscribe((params) => {
       const product = this.productService.getProduct(parseInt(params['id']));
@@ -43,6 +45,10 @@ export class ProductDetailComponent {
         console.error('Product not found');
       }
     });
+  }
+  addToCart() {
+    this.shoppingCartService.addToCart(this.product.id, this.quantityChange);
+    console.log('Product added to cart');
   }
 
   switchFav() {
