@@ -1,3 +1,13 @@
-@for (product of cart.stock; track $index) {
-<app-shopping-cart-item [product]="product"></app-shopping-cart-item>
-}
+<div class="w-2/3 mx-auto flex flex-col gap-4">
+  <h1 class="font-bold text-4xl text-neutral-700">Panier</h1>
+  <div
+    class="grid grid-cols-3 items-center justify-between w-full mt-5 uppercase text-sm font-semibold px-4"
+  >
+    <p>Produit</p>
+    <p class="text-center">Quantité</p>
+    <p class="text-right">Prix</p>
+  </div>
+  @for (item of cart.stock; track $index) {
+  <app-shopping-cart-item [item]="item"></app-shopping-cart-item>
+  }
+</div>
