@@ -44,8 +44,12 @@ export class ShoppingCartComponentItem implements OnInit {
   // total: String = this.price + '€';
 
   @Output() addItemEvent = new EventEmitter<number>();
+  @Output() cartUpdated = new EventEmitter<void>();
 
-  constructor(private productService: ProductService, private ShoppingCartService : ShoppingCartService) {}
+  constructor(
+    private productService: ProductService,
+    private ShoppingCartService: ShoppingCartService,
+  ) {}
 
   ngOnInit(): void {
     const fetchedProduct = this.productService.getProduct(this.item.id);
@@ -55,7 +59,7 @@ export class ShoppingCartComponentItem implements OnInit {
 
   get price(): number {
     console.log(this.product.price * this.item.quantity);
-    
+
     return this.product.price * this.item.quantity;
   }
   changeQuantity(value: number) {
@@ -63,10 +67,11 @@ export class ShoppingCartComponentItem implements OnInit {
   }
   removeFromCart() {
     this.ShoppingCartService.removeFromCart(this.product.id);
+    this.cartUpdated.emit();
   }
   onChangeQuantity(value: number) {
     this.item.quantity = value;
     this.ShoppingCartService.changeQuantity(this.product.id, value);
+    this.cartUpdated.emit();
   }
-
 }

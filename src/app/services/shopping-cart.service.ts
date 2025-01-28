@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ShoppingCart, ShoppingCartProduct } from '../interfaces/shopping-cart';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
- 
-
   cart: ShoppingCart = {
     total_price: 0,
     stock: [],
-  } ;
+  };
 
   getCart(): ShoppingCart {
     this.cart = JSON.parse(localStorage.getItem('shoppingCart') || '{}');
-    return  this.cart;
+    return this.cart;
   }
 
   addToCart(productId: number, quantity: number) {
@@ -31,15 +30,18 @@ export class ShoppingCartService {
       this.cart.stock.push(new_prod);
     }
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
-      this.totalCart();
+    this.totalCart();
   }
-  removeFromCart(productId: number) {
+
+  removeFromCart(productId: number): ShoppingCart {
     this.cart.stock = this.cart.stock.filter(
       (p: ShoppingCartProduct) => p.id !== productId,
     );
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
     this.totalCart();
+    return this.cart;
   }
+
   changeQuantity(productId: number, quantity: number) {
     const index = this.cart.stock.findIndex(
       (p: ShoppingCartProduct) => p.id === productId,
@@ -51,13 +53,16 @@ export class ShoppingCartService {
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
     this.totalCart();
   }
-  clearCart() {
+
+  clearCart(): ShoppingCart {
     this.cart = {
       total_price: 0,
       stock: [],
     };
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
+    return this.cart;
   }
+
   totalCart() {
     let total = 0;
     this.cart.stock.forEach((p: ShoppingCartProduct) => {

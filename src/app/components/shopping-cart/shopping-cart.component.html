@@ -16,7 +16,10 @@
     <p class="text-center">Quantité</p>
     <p class="text-right">Prix</p>
   </div>
-  @for (item of cart.stock; track $index) {
-  <app-shopping-cart-item [item]="item"></app-shopping-cart-item>
-  }
+  <app-shopping-cart-item
+    [item]="item"
+    (cartUpdated)="onCartUpdate()"
+    *ngFor="let item of cart.stock"
+  >
+  </app-shopping-cart-item>
 </div>

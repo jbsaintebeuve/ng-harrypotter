@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgFor } from '@angular/common';
 import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
@@ -9,7 +10,7 @@ import { faSolidTrash } from '@ng-icons/font-awesome/solid';
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [ShoppingCartComponentItem, NgIconComponent],
+  imports: [ShoppingCartComponentItem, NgIconComponent, NgFor],
   providers: [provideIcons({ faSolidTrash })],
   templateUrl: './shopping-cart.component.html',
   styles: ``,
@@ -37,7 +38,11 @@ export class ShoppingCartComponent implements OnInit {
     this.cart = this.shoppingCartService.getCart();
   }
 
+  onCartUpdate() {
+    this.cart = this.shoppingCartService.getCart();
+  }
+
   clearCart() {
-    this.shoppingCartService.clearCart();
+    this.cart = this.shoppingCartService.clearCart();
   }
 }
