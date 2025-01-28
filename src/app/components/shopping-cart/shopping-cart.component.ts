@@ -3,11 +3,14 @@ import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-i
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { Product } from '../../interfaces/product';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { faSolidTrash } from '@ng-icons/font-awesome/solid';
 
 @Component({
   selector: 'app-shopping-cart',
   standalone: true,
-  imports: [ShoppingCartComponentItem],
+  imports: [ShoppingCartComponentItem, NgIconComponent],
+  providers: [provideIcons({ faSolidTrash })],
   templateUrl: './shopping-cart.component.html',
   styles: ``,
 })
@@ -32,5 +35,9 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
+  }
+
+  clearCart() {
+    this.shoppingCartService.clearCart();
   }
 }
