@@ -32,10 +32,7 @@ export class SidePanelComponent {
 
   cart: ShoppingCart = {
     total_price: 0,
-    stock: [
-      // { id: 4, quantity: 2 },
-      // { id: 2, quantity: 10 },
-    ],
+    stock: [],
   };
 
   product: Product = {
@@ -47,11 +44,14 @@ export class SidePanelComponent {
   };
 
   ngOnInit() {
-    // this.shoppingCartService.cart$.subscribe((cart) => {
-    //   this.cart = cart;
-    // });
     this.cart = this.shoppingCartService.getCart();
     this.cart.total_price = this.shoppingCartService.totalCart();
+
+    this.shoppingCartService.cart$.subscribe((cart) => {
+      this.cart = cart;
+      this.cart.total_price = this.shoppingCartService.totalCart();
+    });
+
     setTimeout(() => {
       const hostElement = document.querySelector('app-side-panel');
       hostElement?.classList.add('open');
@@ -64,13 +64,6 @@ export class SidePanelComponent {
     setTimeout(() => {
       this.sidePanelService.close();
     }, 300);
-  }
-
-  onCartUpdate() {
-    this.shoppingCartService.cart$.subscribe((cart) => {
-      this.cart = cart;
-    });
-    this.cart.total_price = this.shoppingCartService.totalCart();
   }
 
   clearCart() {

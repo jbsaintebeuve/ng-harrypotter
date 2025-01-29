@@ -20,38 +20,41 @@ export class ShoppingCartService {
   static cart$: any;
 
   getCart(): ShoppingCart {
-    this.cart = JSON.parse(localStorage.getItem('shoppingCart') || '{}');
+    const storedCart = localStorage.getItem('shoppingCart');
+    if (storedCart) {
+      this.cart = JSON.parse(storedCart);
+    } else {
+      this.cart = {
+        total_price: 0,
+        stock: [],
+      };
+    }
     this.cartSubject.next(this.cart);
     return this.cart;
   }
 
   private updateCart() {
+    this.totalCart();
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
-    this.cartSubject.next(this.cart);
+    this.cartSubject.next({ ...this.cart });
   }
 
   addToCart(productId: number, quantity: number) {
-    let car_quantity: number | undefined;
     const storedCart = localStorage.getItem('shoppingCart');
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     }
-    // Check if product is already in cart
-    if (this.cart.stock.find((p: ShoppingCartProduct) => p.id === productId)) {
-      car_quantity = this.cart.stock.find(
-        (p: ShoppingCartProduct) => p.id === productId,
-      )?.quantity;
-      car_quantity = car_quantity ? car_quantity : 0;
-      this.changeQuantity(productId, quantity + car_quantity);
+
+    const existingProduct = this.cart.stock.find((p) => p.id === productId);
+    if (existingProduct) {
+      existingProduct.quantity += quantity;
     } else {
-      const new_prod: ShoppingCartProduct = {
+      this.cart.stock.push({
         id: productId,
         quantity: quantity,
-      };
-      this.cart.stock.push(new_prod);
+      });
     }
-    localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
-    this.totalCart();
+
     this.updateCart();
   }
 
@@ -71,10 +74,12 @@ export class ShoppingCartService {
     );
     if (index > -1) {
       this.cart.stock[index].quantity = quantity;
+      if (quantity <= 0) {
+        this.removeFromCart(productId);
+      } else {
+        this.updateCart();
+      }
     }
-    localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
-    this.totalCart();
-    this.updateCart();
   }
 
   clearCart(): ShoppingCart {
@@ -89,16 +94,11 @@ export class ShoppingCartService {
   }
 
   totalCart() {
-    const storedCart = localStorage.getItem('shoppingCart');
-    if (storedCart) {
-      this.cart = JSON.parse(storedCart);
-    }
     let total = 0;
-    let price_item = 0;
     this.cart.stock.forEach((p: ShoppingCartProduct) => {
-      if (this.cart.stock.length > 0 && p.id) {
-        price_item = this.productService.getProduct(p.id)?.price || 0;
-        total += price_item * p.quantity;
+      if (p.id) {
+        const price = this.productService.getProduct(p.id)?.price || 0;
+        total += price * p.quantity;
       }
     });
     this.cart.total_price = total;
