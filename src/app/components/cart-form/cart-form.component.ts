@@ -1,5 +1,5 @@
 import { CurrencyPipe, NgClass } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,7 @@ import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { FormInputComponent } from '../form-input/form-input.component';
 import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
+import { PopupComponent } from '../popup/popup.component';
 
 @Component({
   selector: 'app-cart-form',
@@ -23,11 +24,14 @@ import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-i
     RouterLink,
     ReactiveFormsModule,
     NgClass,
+    PopupComponent,
   ],
   templateUrl: './cart-form.component.html',
   styles: ``,
 })
 export class CartFormComponent {
+  @ViewChild(PopupComponent) popup!: PopupComponent;
+
   cart: ShoppingCart = {
     total_price: 0,
     stock: [
@@ -45,6 +49,11 @@ export class CartFormComponent {
   };
 
   checkoutForm: FormGroup;
+
+  popupData = {
+    title: 'Confirmation de commande',
+    description: '',
+  };
 
   constructor(
     private shoppingCartService: ShoppingCartService,
@@ -86,7 +95,13 @@ export class CartFormComponent {
 
   onSubmit() {
     if (this.checkoutForm.valid) {
-      console.log('Form submitted', this.checkoutForm.value);
+      const formData = this.checkoutForm.value;
+      this.popupData.description = `
+        Merci ${formData.firstName} ${formData.lastName} pour votre commande !
+        Montant total : ${this.cart.total_price}€
+        La commande sera livrée à : ${formData.address}, ${formData.zipCode} ${formData.city}
+      `;
+      this.popup.open();
     }
   }
 }
