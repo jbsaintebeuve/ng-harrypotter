@@ -51,7 +51,6 @@ export class ProductDetailComponent {
   addToCart() {
     this.shoppingCartService.addToCart(this.product.id, this.quantity);
     this.sidePanelService.open(true);
-    console.log('Product added to cart');
   }
   onChangeQuantity(value: number) {
     this.quantity = value;
