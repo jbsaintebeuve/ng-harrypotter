@@ -1,0 +1,47 @@
+<div class="w-5/6 md:w-1/2 mx-auto mb-4">
+  <div class="flex flex-col md:flex-row gap-5">
+    <div
+      class="w-full md:w-2/6 h-auto bg-neutral-600 py-20 flex items-center justify-center rounded-lg"
+    >
+      <ng-icon class="text-white text-6xl" name="faSolidImage" />
+    </div>
+    <div
+      class="flex flex-col justify-between gap-2 items-start mt-5 md:w-4/6 w-full"
+    >
+      <div class="flex justify-between items-center w-full">
+        <h1 class="font-bold text-2xl md:text-4xl text-neutral-700">
+          {{ product.name | uppercase }}
+        </h1>
+        @if (isFavorite) {
+        <ng-icon
+          (click)="switchFav()"
+          class="text-xl text-neutral-700 hover:cursor-pointer select-none"
+          name="faSolidHeart"
+        />
+        } @else {
+        <ng-icon
+          (click)="switchFav()"
+          class="text-xl text-neutral-600 hover:cursor-pointer select-none"
+          name="faHeart"
+        />
+        }
+      </div>
+      <p class="text-sm text-neutral-500">
+        {{ product.createdDate | date : 'fullDate' : '' : 'fr' }}
+      </p>
+      <p class="text-2xl font-bold text-neutral-800 w-full">
+        {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
+      </p>
+      <app-quantity-selector
+        [quantity]="quantity"
+        (quantityChange)="onChangeQuantity($event)"
+      ></app-quantity-selector>
+      <button
+        class="bg-neutral-800 text-white px-4 py-3 mt-2 w-full text-sm rounded-md font-semibold text-center hover:cursor-pointer hover:bg-neutral-900"
+        (click)="addToCart()"
+      >
+        Ajouter au panier
+      </button>
+    </div>
+  </div>
+</div>

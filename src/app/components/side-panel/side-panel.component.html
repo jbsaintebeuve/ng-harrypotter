@@ -3,8 +3,9 @@
     class="flex justify-between items-center mb-4 sticky top-0 left-0 right-0 bg-white p-4 z-10 border-b border-neutral-300"
   >
     <div class="flex gap-2 items-center">
-      <h2 class="text-xl font-bold">Favoris</h2>
-      <p class="text-sm text-neutral-400">({{ favoriteCount }} favoris)</p>
+      <ng-icon name="faSolidCartShopping" class="text-neutral-700" />
+      <h2 class="text-xl font-bold">Panier</h2>
+      <p class="text-sm text-neutral-400">({{ cart.stock.length }} articles)</p>
     </div>
     <button (click)="prepareClose()" class="text-gray-500 text-xl">
       &times;
@@ -12,21 +13,37 @@
   </div>
 
   <div class="flex flex-col gap-4 p-4">
-    @for (product of favoriteProducts; track product.id) {
-    <app-product-card [product]="product" />
+    @for (item of cart.stock; track $index) {
+    <app-shopping-cart-item
+      [item]="item"
+      [minimized]="true"
+    ></app-shopping-cart-item>
     }
   </div>
 
-  @if (favoriteProducts.length > 0) {
+  @if (cart.stock.length > 0) {
   <div
-    class="flex justify-center p-4 margin-top-auto sticky bottom-0 left-0 right-0 bg-white border-t border-neutral-300"
+    class="flex flex-col justify-center p-4 margin-top-auto sticky bottom-0 left-0 right-0 bg-white border-t border-neutral-300 gap-4"
   >
-    <button
-      (click)="clearFavorites()"
-      class="bg-neutral-800 text-white px-4 py-2 rounded-md"
-    >
-      Vider les favoris
-    </button>
+    <p class="text-lg font-bold">
+      Total: {{ cart.total_price | currency : 'EUR' : true : '' : 'fr' }}
+    </p>
+
+    <div class="flex gap-4 mx-auto">
+      <a
+        routerLink="/panier"
+        (click)="closePanel()"
+        class="bg-neutral-800 text-white px-4 py-2 rounded-md hover:cursor-pointer hover:bg-neutral-900"
+      >
+        Voir le panier
+      </a>
+      <button
+        (click)="clearCart()"
+        class="border border-neutral-400 text-neutral-500 px-4 py-2 rounded-md hover:cursor-pointer"
+      >
+        Vider le panier
+      </button>
+    </div>
   </div>
   }
 </div>

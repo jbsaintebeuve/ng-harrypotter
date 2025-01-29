@@ -34,8 +34,13 @@ export class ProductCardComponent {
     price: 0,
     createdDate: new Date(),
   };
+  get isFavorite(): boolean {
+    return this.productService.isFavorite(this.product.id);
+  }
 
-  switchFav() {
-    this.productService.switchFav(this.product);
+  switchFav(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.productService.addToFav(this.product);
   }
 }

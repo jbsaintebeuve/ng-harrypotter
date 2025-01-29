@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/product';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -113,25 +114,86 @@ export class ProductService {
     },
   ];
 
+  constructor() {
+    this.getFav(); // Initialize favorites on service creation
+  }
+
   getProducts() {
     return this.products;
+  }
+  getProduct(id: number) {
+    return this.products.find((p) => p.id === id);
   }
 
   addProduct(id: number) {
     this.products[id];
   }
 
-  switchFav(product: Product) {
-    product.isFavorite = !product.isFavorite;
+  private favSubject = new BehaviorSubject<number[]>([0]);
+  fav$ = this.favSubject.asObservable();
+
+  fav: number[] = [];
+  static cart$: any;
+
+  getFav(): number[] {
+    const storedFav = localStorage.getItem('ng-hp-fav');
+    if (storedFav) {
+      this.fav = JSON.parse(storedFav);
+      this.editFav();
+    } else {
+      this.fav = [];
+    }
+    this.favSubject.next(this.fav);
+    return this.fav;
   }
 
   getFavoriteCount(): number {
-    return this.products.filter((p) => p.isFavorite).length;
+    return this.getFav().length;
+  }
+  private updateFav() {
+    localStorage.setItem('ng-hp-fav', JSON.stringify(this.fav));
+    this.favSubject.next({ ...this.fav });
   }
 
-  clearFavorites(): void {
+  addToFav(product: Product) {
+    const storedFav = localStorage.getItem('ng-hp-fav');
+    if (storedFav) {
+      this.fav = JSON.parse(storedFav);
+    }
+
+    const existingProduct = this.fav.find((f) => f === product.id);
+    product.isFavorite = !product.isFavorite;
+    if (existingProduct) {
+      this.fav = this.fav.filter((f) => f !== product.id);
+    } else {
+      this.fav.push(product.id);
+    }
+
+    this.updateFav();
+  }
+
+  removeFromFav(productId: number): number[] {
+    this.fav = this.fav.filter((p: number) => p !== productId);
+    localStorage.setItem('ng-hp-fav', JSON.stringify(this.fav));
+    this.updateFav();
+    return this.fav;
+  }
+  isFavorite(productId: number): boolean {
+    return this.fav.includes(productId);
+  }
+
+  clearFav(): number[] {
+    this.fav = [];
+    localStorage.setItem('ng-hp-fav', JSON.stringify(this.fav));
+    this.updateFav();
+    return this.fav;
+  }
+
+  editFav() {
     this.products.forEach((product) => {
-      product.isFavorite = false;
+      if (this.fav.includes(product.id)) {
+        product.isFavorite = true;
+      }
     });
   }
 }

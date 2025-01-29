@@ -6,6 +6,8 @@ import { ProductService } from '../../services/product.service';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { SelectComponent } from '../select/select.component';
 import { Product } from '../../interfaces/product';
+import { SearchComponent } from '../search/search.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-grid',
@@ -16,6 +18,8 @@ import { Product } from '../../interfaces/product';
     SortByPipe,
     SearchForPipe,
     SelectComponent,
+    SearchComponent,
+    RouterLink,
   ],
   templateUrl: './product-grid.component.html',
 })
@@ -26,6 +30,7 @@ export class ProductGridComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.productService.getProducts();
+    this.productService.getFav();
   }
 
   get favoriteCount(): number {
@@ -39,4 +44,8 @@ export class ProductGridComponent implements OnInit {
     { name: 'Plus ancienne', value: 'date', asc: true },
   ];
   sortSelected: number = 0;
+
+  onSearch(term: string) {
+    this.searchTerm = term;
+  }
 }
