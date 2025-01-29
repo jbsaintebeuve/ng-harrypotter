@@ -52,6 +52,9 @@ export class ProductDetailComponent {
     this.shoppingCartService.addToCart(this.product.id, this.quantity);
     this.sidePanelService.open(true);
   }
+  get isFavorite(): boolean {
+    return this.productService.isFavorite(this.product.id);
+  }
   onChangeQuantity(value: number) {
     this.quantity = value;
   }

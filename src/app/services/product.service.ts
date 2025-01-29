@@ -114,6 +114,10 @@ export class ProductService {
     },
   ];
 
+  constructor() {
+    this.getFav(); // Initialize favorites on service creation
+  }
+
   getProducts() {
     return this.products;
   }
@@ -173,6 +177,9 @@ export class ProductService {
     localStorage.setItem('ng-hp-fav', JSON.stringify(this.fav));
     this.updateFav();
     return this.fav;
+  }
+  isFavorite(productId: number): boolean {
+    return this.fav.includes(productId);
   }
 
   clearFav(): number[] {

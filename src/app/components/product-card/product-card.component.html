@@ -5,7 +5,7 @@
     <h1 class="font-bold text-xl text-neutral-700">
       {{ product.name | uppercase }}
     </h1>
-    @if (product.isFavorite) {
+    @if (isFavorite) {
     <ng-icon
       (click)="switchFav($event)"
       class="text-xl text-neutral-700 hover:cursor-pointer select-none pointer-events-auto"

@@ -34,6 +34,9 @@ export class ProductCardComponent {
     price: 0,
     createdDate: new Date(),
   };
+  get isFavorite(): boolean {
+    return this.productService.isFavorite(this.product.id);
+  }
 
   switchFav(event: Event) {
     event.stopPropagation();
