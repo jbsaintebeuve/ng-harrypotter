@@ -38,6 +38,6 @@ export class ProductCardComponent {
   switchFav(event: Event) {
     event.stopPropagation();
     event.preventDefault();
-    this.productService.switchFav(this.product);
+    this.productService.addToFav(this.product);
   }
 }

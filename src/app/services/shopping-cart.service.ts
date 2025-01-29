@@ -20,7 +20,7 @@ export class ShoppingCartService {
   static cart$: any;
 
   getCart(): ShoppingCart {
-    const storedCart = localStorage.getItem('shoppingCart');
+    const storedCart = localStorage.getItem('ng-hp-cart');
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     } else {
@@ -35,12 +35,12 @@ export class ShoppingCartService {
 
   private updateCart() {
     this.totalCart();
-    localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
+    localStorage.setItem('ng-hp-cart', JSON.stringify(this.cart));
     this.cartSubject.next({ ...this.cart });
   }
 
   addToCart(productId: number, quantity: number) {
-    const storedCart = localStorage.getItem('shoppingCart');
+    const storedCart = localStorage.getItem('ng-hp-cart');
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     }
@@ -62,7 +62,7 @@ export class ShoppingCartService {
     this.cart.stock = this.cart.stock.filter(
       (p: ShoppingCartProduct) => p.id !== productId,
     );
-    localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
+    localStorage.setItem('ng-hp-cart', JSON.stringify(this.cart));
     this.totalCart();
     this.updateCart();
     return this.cart;
@@ -87,7 +87,7 @@ export class ShoppingCartService {
       total_price: 0,
       stock: [],
     };
-    localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
+    localStorage.setItem('ng-hp-cart', JSON.stringify(this.cart));
     this.totalCart();
     this.updateCart();
     return this.cart;

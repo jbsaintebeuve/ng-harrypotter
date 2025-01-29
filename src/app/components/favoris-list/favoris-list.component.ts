@@ -19,10 +19,12 @@ export class FavorisListComponent {
   }
 
   get favoriteProducts(): Product[] {
-    return this.productService.products.filter((p) => p.isFavorite);
+    // return this.productService.products.filter((p) => p.isFavorite);
+    const fav = this.productService.getFav();
+    return this.productService.products.filter((p) => fav.includes(p.id));
   }
 
   clearFavorites() {
-    this.productService.clearFavorites();
+    this.productService.clearFav();
   }
 }

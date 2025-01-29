@@ -56,6 +56,6 @@ export class ProductDetailComponent {
     this.quantity = value;
   }
   switchFav() {
-    this.productService.switchFav(this.product);
+    this.productService.addToFav(this.product);
   }
 }
