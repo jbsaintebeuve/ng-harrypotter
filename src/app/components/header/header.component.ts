@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { ProductService } from '../../services/product.service';
-import { SidePanelService } from '../../services/side-panel.service';
 import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
-import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { ShoppingCart } from '../../interfaces/shopping-cart';
+import { SidePanelService } from '../../services/side-panel.service';
 
 @Component({
   selector: 'app-header',

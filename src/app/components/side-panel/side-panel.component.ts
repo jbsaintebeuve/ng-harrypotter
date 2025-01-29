@@ -47,7 +47,11 @@ export class SidePanelComponent {
   };
 
   ngOnInit() {
+    // this.shoppingCartService.cart$.subscribe((cart) => {
+    //   this.cart = cart;
+    // });
     this.cart = this.shoppingCartService.getCart();
+    this.cart.total_price = this.shoppingCartService.totalCart();
     setTimeout(() => {
       const hostElement = document.querySelector('app-side-panel');
       hostElement?.classList.add('open');
@@ -63,7 +67,10 @@ export class SidePanelComponent {
   }
 
   onCartUpdate() {
-    this.cart = this.shoppingCartService.getCart();
+    this.shoppingCartService.cart$.subscribe((cart) => {
+      this.cart = cart;
+    });
+    this.cart.total_price = this.shoppingCartService.totalCart();
   }
 
   clearCart() {

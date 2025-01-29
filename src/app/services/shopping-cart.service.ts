@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ShoppingCart, ShoppingCartProduct } from '../interfaces/shopping-cart';
 import { ProductService } from './product.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
+  private cartSubject = new BehaviorSubject<ShoppingCart>({
+    total_price: 0,
+    stock: [],
+  });
+  cart$ = this.cartSubject.asObservable();
+
   cart: ShoppingCart = {
     total_price: 0,
     stock: [],
@@ -12,7 +20,13 @@ export class ShoppingCartService {
 
   getCart(): ShoppingCart {
     this.cart = JSON.parse(localStorage.getItem('shoppingCart') || '{}');
+    this.cartSubject.next(this.cart);
     return this.cart;
+  }
+
+  private updateCart() {
+    localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
+    this.cartSubject.next(this.cart);
   }
 
   addToCart(productId: number, quantity: number) {
@@ -37,6 +51,7 @@ export class ShoppingCartService {
     }
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
     this.totalCart();
+    this.updateCart();
   }
 
   removeFromCart(productId: number): ShoppingCart {
@@ -45,6 +60,7 @@ export class ShoppingCartService {
     );
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
     this.totalCart();
+    this.updateCart();
     return this.cart;
   }
 
@@ -57,6 +73,7 @@ export class ShoppingCartService {
     }
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
     this.totalCart();
+    this.updateCart();
   }
 
   clearCart(): ShoppingCart {
@@ -66,6 +83,7 @@ export class ShoppingCartService {
     };
     localStorage.setItem('shoppingCart', JSON.stringify(this.cart));
     this.totalCart();
+    this.updateCart();
     return this.cart;
   }
 

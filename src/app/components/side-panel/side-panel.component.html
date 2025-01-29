@@ -23,9 +23,13 @@
 
   @if (cart.stock.length > 0) {
   <div
-    class="flex justify-center p-4 margin-top-auto sticky bottom-0 left-0 right-0 bg-white border-t border-neutral-300"
+    class="flex flex-col justify-center p-4 margin-top-auto sticky bottom-0 left-0 right-0 bg-white border-t border-neutral-300 gap-4"
   >
-    <div class="flex gap-4">
+    <p class="text-lg font-bold">
+      Total: {{ cart.total_price | currency : 'EUR' : true : '' : 'fr' }}
+    </p>
+
+    <div class="flex gap-4 mx-auto">
       <a
         routerLink="/panier"
         (click)="closePanel()"
