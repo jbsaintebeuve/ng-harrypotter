@@ -17,6 +17,7 @@ export class ShoppingCartService {
     total_price: 0,
     stock: [],
   };
+  static cart$: any;
 
   getCart(): ShoppingCart {
     this.cart = JSON.parse(localStorage.getItem('shoppingCart') || '{}');
