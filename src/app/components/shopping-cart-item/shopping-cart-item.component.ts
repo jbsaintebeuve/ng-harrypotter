@@ -7,6 +7,7 @@ import { ShoppingCartProduct } from '../../interfaces/shopping-cart';
 import { ProductService } from '../../services/product.service';
 import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-shopping-cart-item',
   standalone: true,
@@ -16,6 +17,7 @@ import { ShoppingCartService } from '../../services/shopping-cart.service';
     CurrencyPipe,
     DecimalPipe,
     UpperCasePipe,
+    RouterLink,
   ],
   providers: [provideIcons({ faSolidImage, faSolidTrash })],
   templateUrl: './shopping-cart-item.component.html',

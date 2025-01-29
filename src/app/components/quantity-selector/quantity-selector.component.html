@@ -1,20 +1,24 @@
-<div class="flex items-center border border-gray-200 rounded">
+<div
+  class="flex items-center border border-gray-200 rounded scale-90 sm:scale-100"
+>
   <button
     (click)="decrement()"
     [disabled]="quantity <= min"
-    class="w-10 h-10 leading-10 text-gray-600 transition hover:opacity-75 disabled:opacity-50"
+    class="w-8 h-8 sm:w-10 sm:h-10 leading-8 sm:leading-10 text-gray-600 transition hover:opacity-75 disabled:opacity-50"
   >
     −
   </button>
 
-  <span class="w-12 h-10 leading-10 text-center text-gray-600">
+  <span
+    class="w-10 sm:w-12 h-8 sm:h-10 leading-8 sm:leading-10 text-center text-gray-600"
+  >
     {{ quantity }}
   </span>
 
   <button
     (click)="increment()"
     [disabled]="quantity >= max"
-    class="w-10 h-10 leading-10 text-gray-600 transition hover:opacity-75 disabled:opacity-50"
+    class="w-8 h-8 sm:w-10 sm:h-10 leading-8 sm:leading-10 text-gray-600 transition hover:opacity-75 disabled:opacity-50"
   >
     +
   </button>

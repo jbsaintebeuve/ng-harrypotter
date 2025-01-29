@@ -5,7 +5,7 @@
     >Retour au panier</a
   >
   <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-    <div class="grid grid-cols-3 gap-10">
+    <div class="flex flex-col md:grid md:grid-cols-3 gap-10">
       <div class="flex flex-col gap-4 col-span-2">
         <p class="font-semibold text-normal">Informations personnelles</p>
         <div class="grid grid-cols-2 gap-4 w-full">
