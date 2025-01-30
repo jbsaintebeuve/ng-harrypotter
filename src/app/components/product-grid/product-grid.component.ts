@@ -31,6 +31,7 @@ export class ProductGridComponent implements OnInit {
   ngOnInit(): void {
     this.products = this.productService.getProducts();
     this.productService.getFav();
+    this.productService.fetchProducts();
   }
 
   get favoriteCount(): number {

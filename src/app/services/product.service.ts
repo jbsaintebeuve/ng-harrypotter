@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/product';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -114,8 +115,18 @@ export class ProductService {
     },
   ];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.getFav(); // Initialize favorites on service creation
+  }
+
+  fetchProducts() {
+    this.http
+      .get(
+        'https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[1%20TO%20150]',
+      )
+      .subscribe((data: any) => {
+        console.log(data.data);
+      });
   }
 
   getProducts() {
