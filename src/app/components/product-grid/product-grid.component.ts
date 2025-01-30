@@ -8,6 +8,10 @@ import { SelectComponent } from '../select/select.component';
 import { Product } from '../../interfaces/product';
 import { SearchComponent } from '../search/search.component';
 import { RouterLink } from '@angular/router';
+import { MultiSelectorComponent } from '../multi-selector/multi-selector.component';
+import { PokemonService } from '../../services/pokemon.service';
+import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
+import { PokemonCard } from '../../interfaces/pokemon-card';
 
 @Component({
   selector: 'app-product-grid',
@@ -20,18 +24,36 @@ import { RouterLink } from '@angular/router';
     SelectComponent,
     SearchComponent,
     RouterLink,
+    MultiSelectorComponent,
+    PokemonCardComponent,
   ],
   templateUrl: './product-grid.component.html',
 })
 export class ProductGridComponent implements OnInit {
-  constructor(public productService: ProductService) {}
+  constructor(
+    public productService: ProductService,
+    private pokemonService: PokemonService,
+  ) {}
   @Input() searchTerm: string = '';
   products: Product[] = [];
+
+  pokemons: PokemonCard[] = [];
+
+  types: string[] = [];
+  selectedTypes: string[] = [];
 
   ngOnInit(): void {
     this.products = this.productService.getProducts();
     this.productService.getFav();
-    this.productService.fetchProducts();
+    this.pokemonService.fetchPokemons();
+    this.pokemonService.getPokemons().subscribe((pokemon) => {
+      pokemon.forEach((p) => {
+        this.pokemons.push(p);
+      });
+    });
+    this.pokemonService.getTypes().subscribe((types) => {
+      this.types = types;
+    });
   }
 
   get favoriteCount(): number {
@@ -48,5 +70,14 @@ export class ProductGridComponent implements OnInit {
 
   onSearch(term: string) {
     this.searchTerm = term;
+  }
+
+  onCategorySelect(categoryId: string): void {
+    const index = this.selectedTypes.indexOf(categoryId);
+    if (index === -1) {
+      this.selectedTypes.push(categoryId);
+    } else {
+      this.selectedTypes.splice(index, 1);
+    }
   }
 }
