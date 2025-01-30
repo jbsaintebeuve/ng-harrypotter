@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
@@ -36,6 +36,7 @@ export class ProductDetailComponent {
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
+    private router: Router,
     private shoppingCartService: ShoppingCartService,
     private sidePanelService: SidePanelService,
   ) {
@@ -44,7 +45,7 @@ export class ProductDetailComponent {
       if (product) {
         this.product = product;
       } else {
-        console.error('Product not found');
+        this.router.navigate(['404']);
       }
     });
   }

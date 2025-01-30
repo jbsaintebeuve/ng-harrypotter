@@ -36,4 +36,9 @@ export const routes: Routes = [
     title: 'Erreur 404',
     component: PageErrorComponent,
   },
+  {
+    path: '404',
+    title: 'Erreur 404',
+    component: PageErrorComponent,
+  },
 ];
