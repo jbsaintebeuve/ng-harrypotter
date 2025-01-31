@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { CartFormComponent } from './components/cart-form/cart-form.component';
 import { FavorisListComponent } from './components/favoris-list/favoris-list.component';
 import { PageErrorComponent } from './components/page-error/page-error.component';
-import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { PokemonDetailComponent } from './components/pokemon-detail/pokemon-detail.component';
 import { ProductGridComponent } from './components/product-grid/product-grid.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 export const routes: Routes = [
@@ -12,9 +12,9 @@ export const routes: Routes = [
     component: ProductGridComponent,
   },
   {
-    path: 'product/:id',
-    title: 'Détail du produit',
-    component: ProductDetailComponent,
+    path: 'pokemon/:id',
+    title: 'Détail du pokemon',
+    component: PokemonDetailComponent,
   },
   {
     path: 'panier',

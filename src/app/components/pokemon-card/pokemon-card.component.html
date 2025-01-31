@@ -1,1 +1,23 @@
-<img src="{{ pokemon?.images?.large }}" alt="{{ pokemon?.name }}" />
+<div class="card-container">
+  <div
+    class="border-4 border-red-500 p-2 text-xs uppercase font-medium bg-white text-neutral-600"
+  >
+    <div class="flex w-full justify-between">
+      <p class="font-semibold text-neutral-900">{{ pokemon?.name }}</p>
+      <p>
+        #{{
+          (pokemon?.nationalPokedexNumbers)![0]
+            ? (pokemon?.nationalPokedexNumbers)![0]
+            : 'undefined'
+        }}
+      </p>
+    </div>
+    <p>{{ pokemon?.rarity ? pokemon?.rarity : 'undefined' }}</p>
+    <p>{{ pokemon?.set?.name ? pokemon?.set?.name : 'undefined' }}</p>
+  </div>
+  <div class="plastic-case">
+    <div class="card">
+      <img src="{{ pokemon?.images?.large }}" alt="{{ pokemon?.name }}" />
+    </div>
+  </div>
+</div>

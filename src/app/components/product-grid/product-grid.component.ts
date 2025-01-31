@@ -51,6 +51,7 @@ export class ProductGridComponent implements OnInit {
         this.pokemons.push(p);
       });
     });
+    // this.pokemons = Array(20).fill({});
     this.pokemonService.getTypes().subscribe((types) => {
       this.types = types;
     });

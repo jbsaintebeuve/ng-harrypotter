@@ -67,6 +67,7 @@ interface TcgPlayer {
   prices: {
     normal: PriceDetails;
     reverseHolofoil: PriceDetails;
+    holofoil: PriceDetails;
   };
 }
 

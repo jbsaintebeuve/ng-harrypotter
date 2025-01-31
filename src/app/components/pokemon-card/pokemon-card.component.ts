@@ -6,7 +6,7 @@ import { PokemonCard } from '../../interfaces/pokemon-card';
   standalone: true,
   imports: [],
   templateUrl: './pokemon-card.component.html',
-  styles: ``,
+  styleUrls: ['./pokemon-card.component.scss'],
 })
 export class PokemonCardComponent {
   constructor() {}

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PokemonCard } from '../interfaces/pokemon-card';
+import { PokemonResponse } from '../interfaces/pokemon-response';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,12 @@ export class PokemonService {
         this.pokemonSubject.next(data);
         this.typesSubject.next(Array.from(allTypes));
       });
+  }
+
+  fetchPokemon(id: string): Observable<PokemonResponse> {
+    return this.http.get<PokemonResponse>(
+      `https://api.pokemontcg.io/v2/cards/${id}`,
+    );
   }
 
   getPokemons(): Observable<PokemonCard[]> {
