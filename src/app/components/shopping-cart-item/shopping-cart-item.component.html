@@ -10,11 +10,14 @@
     </div>
     <div class="flex flex-col justify-between gap-1 items-start">
       <p class="text-normal font-semibold text-gray-800">
-        {{ product.name | uppercase }}
+        {{ pokemon.name | uppercase }}
       </p>
       <p class="text-neutral-400 text-xs">
         {{ quantity }} x
-        {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
+        {{
+          pokemon.tcgplayer.prices.holofoil.market
+            | currency : 'EUR' : true : '' : 'fr'
+        }}
       </p>
     </div>
   </div>
@@ -35,14 +38,17 @@
     </div>
     <div class="flex flex-col justify-between gap-1 items-start">
       <a
-        routerLink="/product/{{ product.id }}"
+        routerLink="/pokemon/{{ pokemon.id }}"
         class="text-sm md:text-lg font-semibold text-gray-800"
       >
-        {{ product.name | uppercase }}
+        {{ pokemon.name | uppercase }}
       </a>
       <p class="text-neutral-400 text-xs">
         {{ quantity }} x
-        {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
+        {{
+          pokemon.tcgplayer.prices.holofoil.market
+            | currency : 'EUR' : true : '' : 'fr'
+        }}
       </p>
     </div>
   </div>

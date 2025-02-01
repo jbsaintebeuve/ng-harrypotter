@@ -44,4 +44,72 @@ export class PokemonService {
   getTypes(): Observable<string[]> {
     return this.typesSubject.asObservable();
   }
+
+  private favSubject = new BehaviorSubject<string[]>(['']);
+  fav$ = this.favSubject.asObservable();
+
+  fav: string[] = [];
+  static cart$: any;
+
+  getFav(): string[] {
+    const storedFav = localStorage.getItem('ng-poke-fav');
+    if (storedFav) {
+      this.fav = JSON.parse(storedFav);
+      // this.editFav();
+    } else {
+      this.fav = [];
+    }
+    this.favSubject.next(this.fav);
+    return this.fav;
+  }
+
+  getFavoriteCount(): number {
+    return this.getFav().length;
+  }
+  private updateFav() {
+    localStorage.setItem('ng-poke-fav', JSON.stringify(this.fav));
+    this.favSubject.next({ ...this.fav });
+  }
+
+  addToFav(product: PokemonCard) {
+    const storedFav = localStorage.getItem('ng-poke-fav');
+    if (storedFav) {
+      this.fav = JSON.parse(storedFav);
+    }
+
+    const existingProduct = this.fav.find((f) => f === product.id);
+    // product.isFavorite = !product.isFavorite;
+    if (existingProduct) {
+      this.fav = this.fav.filter((f) => f !== product.id);
+    } else {
+      this.fav.push(product.id);
+    }
+
+    this.updateFav();
+  }
+
+  removeFromFav(productId: string): string[] {
+    this.fav = this.fav.filter((p: string) => p !== productId);
+    localStorage.setItem('ng-poke-fav', JSON.stringify(this.fav));
+    this.updateFav();
+    return this.fav;
+  }
+  isFavorite(productId: string): boolean {
+    return this.fav.includes(productId);
+  }
+
+  clearFav(): string[] {
+    this.fav = [];
+    localStorage.setItem('ng-poke-fav', JSON.stringify(this.fav));
+    this.updateFav();
+    return this.fav;
+  }
+
+  // editFav() {
+  //   this.products.forEach((product) => {
+  //     if (this.fav.includes(product.id)) {
+  //       product.isFavorite = true;
+  //     }
+  //   });
+  // }
 }

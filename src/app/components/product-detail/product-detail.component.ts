@@ -50,7 +50,7 @@ export class ProductDetailComponent {
     });
   }
   addToCart() {
-    this.shoppingCartService.addToCart(this.product.id, this.quantity);
+    // this.shoppingCartService.addToCart(this.product.id, this.quantity);
     this.sidePanelService.open(true);
   }
   get isFavorite(): boolean {

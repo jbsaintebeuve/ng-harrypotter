@@ -44,12 +44,16 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
-    this.cart.total_price = this.shoppingCartService.totalCart();
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
+    });
   }
 
   onCartUpdate() {
     this.cart = this.shoppingCartService.getCart();
-    this.cart.total_price = this.shoppingCartService.totalCart();
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
+    });
   }
 
   clearCart() {

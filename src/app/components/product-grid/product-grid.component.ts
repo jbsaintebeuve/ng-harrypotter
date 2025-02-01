@@ -17,7 +17,7 @@ import { PokemonCard } from '../../interfaces/pokemon-card';
   selector: 'app-product-grid',
   standalone: true,
   imports: [
-    ProductCardComponent,
+    // ProductCardComponent,
     FormsModule,
     SortByPipe,
     SearchForPipe,

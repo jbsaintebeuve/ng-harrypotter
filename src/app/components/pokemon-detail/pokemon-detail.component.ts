@@ -8,17 +8,20 @@ import { PokemonResponse } from '../../interfaces/pokemon-response';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
+import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 
 @Component({
   selector: 'app-pokemon-detail',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, QuantitySelectorComponent],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss'],
 })
 export class PokemonDetailComponent {
-  pokemon: PokemonCard | undefined;
+  pokemon: PokemonCard | null = null;
   isFlipped = false;
+
+  quantity = 1;
 
   constructor(
     private pokemonService: PokemonService,
@@ -81,5 +84,25 @@ export class PokemonDetailComponent {
     setTimeout(() => {
       cardInner.classList.remove('spinning');
     }, 1600);
+  }
+
+  addToCart() {
+    if (this.pokemon?.id) {
+      this.shoppingCartService.addToCart(this.pokemon.id, this.quantity);
+    }
+    this.sidePanelService.open(true);
+  }
+  get isFavorite(): boolean {
+    return this.pokemon
+      ? this.pokemonService.isFavorite(this.pokemon.id)
+      : false;
+  }
+  onChangeQuantity(value: number) {
+    this.quantity = value;
+  }
+  switchFav() {
+    if (this.pokemon) {
+      this.pokemonService.addToFav(this.pokemon);
+    }
   }
 }

@@ -73,7 +73,9 @@ export class CartFormComponent {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
-    this.cart.total_price = this.shoppingCartService.totalCart();
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
+    });
 
     if (this.cart.stock.length === 0) {
       this.router.navigate(['/panier']);
@@ -82,7 +84,9 @@ export class CartFormComponent {
 
   onCartUpdate() {
     this.cart = this.shoppingCartService.getCart();
-    this.cart.total_price = this.shoppingCartService.totalCart();
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
+    });
   }
 
   clearCart() {

@@ -45,11 +45,15 @@ export class SidePanelComponent {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
-    this.cart.total_price = this.shoppingCartService.totalCart();
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
+    });
 
     this.shoppingCartService.cart$.subscribe((cart) => {
       this.cart = cart;
-      this.cart.total_price = this.shoppingCartService.totalCart();
+      this.shoppingCartService.totalCart().subscribe((total) => {
+        this.cart.total_price = total;
+      });
     });
 
     setTimeout(() => {
