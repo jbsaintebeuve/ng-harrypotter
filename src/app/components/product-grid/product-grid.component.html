@@ -23,21 +23,16 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-x-5 gap-y-4">
-      <!-- @for (p of (products |
-      sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc) |
-      searchFor:searchTerm; track p.id) {
-      <a routerLink="/product/{{ p.id }}">
-        <app-product-card [product]="p" />
-      </a>
-      } -->
-      @for (pokemon of pokemons; track pokemon.id) {
+      @for (pokemon of pokemons | filterBy:selectedTypes |
+      sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc |
+      searchFor:searchTerm; track pokemon.id) {
       <a routerLink="/pokemon/{{ pokemon.id }}">
         <app-pokemon-card [pokemon]="pokemon" />
       </a>
       }
     </div>
-    @if ((products |
-    sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc) |
+    @if (pokemons | filterBy:selectedTypes |
+    sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc |
     searchFor:searchTerm; as filtered) { @if (filtered.length === 0) {
     <p class="text-center text-neutral-500">Aucun produit trouvé</p>
     } }

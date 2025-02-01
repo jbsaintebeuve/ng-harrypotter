@@ -1,17 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Product } from '../interfaces/product';
+import { PokemonCard } from '../interfaces/pokemon-card';
 @Pipe({
   name: 'searchFor',
   standalone: true,
 })
 export class SearchForPipe implements PipeTransform {
-  transform(products: Product[], search: string) {
+  transform(pokemons: PokemonCard[], search: string) {
     if (!search) {
-      return products;
+      return pokemons;
     }
 
-    return products.filter((product) => {
-      return product.name.toLowerCase().includes(search.toLowerCase());
+    return pokemons.filter((pokemon) => {
+      return pokemon.name.toLowerCase().includes(search.toLowerCase());
     });
   }
 }

@@ -1,34 +1,30 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Product } from '../interfaces/product';
+import { PokemonCard } from '../interfaces/pokemon-card';
 
 @Pipe({
   name: 'sortBy',
   standalone: true,
 })
 export class SortByPipe implements PipeTransform {
-  transform(products: Product[], type?: string, asc?: boolean) {
+  transform(pokemons: PokemonCard[], type?: string, asc?: boolean) {
     switch (type) {
       case 'name':
-        return this.sortByName(products, asc);
-      case 'date':
-        return this.sortByDate(products, asc);
+        return this.sortByName(pokemons, asc);
+      case 'hp':
+        return this.sortByHp(pokemons, asc);
       default:
-        return products;
+        return pokemons;
     }
   }
 
-  sortByName(products: Product[], asc?: boolean) {
+  sortByName(pokemons: PokemonCard[], asc?: boolean) {
     return asc
-      ? products.sort((a, b) => a.name.localeCompare(b.name))
-      : products.sort((a, b) => b.name.localeCompare(a.name));
+      ? pokemons.sort((a, b) => a.name.localeCompare(b.name))
+      : pokemons.sort((a, b) => b.name.localeCompare(a.name));
   }
-  sortByDate(products: Product[], asc?: boolean) {
+  sortByHp(pokemons: PokemonCard[], asc?: boolean) {
     return asc
-      ? products.sort(
-          (a, b) => a.createdDate.getTime() - b.createdDate.getTime(),
-        )
-      : products.sort(
-          (a, b) => b.createdDate.getTime() - a.createdDate.getTime(),
-        );
+      ? pokemons.sort((a, b) => parseInt(a.hp) - parseInt(b.hp))
+      : pokemons.sort((a, b) => parseInt(b.hp) - parseInt(a.hp));
   }
 }

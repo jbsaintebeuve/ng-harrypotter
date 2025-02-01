@@ -19,7 +19,7 @@ import { PokemonResponse } from '../../interfaces/pokemon-response';
     NgIconComponent,
     QuantitySelectorComponent,
     CurrencyPipe,
-    DecimalPipe,
+    // DecimalPipe,
     UpperCasePipe,
     RouterLink,
   ],
