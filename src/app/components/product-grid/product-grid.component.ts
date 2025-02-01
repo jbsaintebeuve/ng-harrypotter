@@ -11,6 +11,8 @@ import { MultiSelectorComponent } from '../multi-selector/multi-selector.compone
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { SearchComponent } from '../search/search.component';
 import { SelectComponent } from '../select/select.component';
+import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-grid',
@@ -25,6 +27,7 @@ import { SelectComponent } from '../select/select.component';
     MultiSelectorComponent,
     PokemonCardComponent,
     FilterByPipe,
+    PokemonCardPlaceholderComponent,
   ],
   templateUrl: './product-grid.component.html',
 })
@@ -37,11 +40,22 @@ export class ProductGridComponent implements OnInit {
 
   pokemons: PokemonCard[] = [];
 
+  isLoading = true;
+  placeholders = Array(12).fill({});
+
   types: string[] = [];
   selectedTypes: string[] = [];
 
   ngOnInit(): void {
-    this.pokemonService.fetchPokemons();
+    this.pokemonService
+      .fetchPokemons()
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
+      .subscribe();
+
     this.pokemonService.getPokemons().subscribe({
       next: (pokemons) => {
         this.pokemons = pokemons;

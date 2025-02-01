@@ -101,7 +101,8 @@ export class ShoppingCartService {
     const pokemonRequests = this.cart.stock.map((item) =>
       this.pokemonService.fetchPokemon(item.id).pipe(
         map((response) => {
-          const price = response.data.tcgplayer?.prices?.holofoil?.market || 0;
+          const price =
+            response.data?.cardmarket?.prices?.averageSellPrice || 0;
           return price * item.quantity;
         }),
       ),

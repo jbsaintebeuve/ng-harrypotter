@@ -24,18 +24,18 @@
     </div>
 
     <div class="flex flex-wrap gap-5 items-center justify-center">
-      @for (pokemon of pokemons | filterBy:selectedTypes |
+      @if (isLoading) { @for (placeholder of placeholders; track $index) {
+      <app-pokemon-card-placeholder></app-pokemon-card-placeholder>
+      } } @else if (pokemons.length > 0) { @if (pokemons |
+      filterBy:selectedTypes |
       sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc |
-      searchFor:searchTerm; track pokemon.id) {
+      searchFor:searchTerm; as filtered) { @if (filtered.length === 0) {
+      <p class="text-center text-neutral-500">Aucun pokémon trouvé</p>
+      } @else { @for (pokemon of filtered; track pokemon.id) {
       <a routerLink="/pokemon/{{ pokemon.id }}">
         <app-pokemon-card [pokemon]="pokemon" />
       </a>
-      }
+      } } } }
     </div>
-    @if (pokemons | filterBy:selectedTypes |
-    sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc |
-    searchFor:searchTerm; as filtered) { @if (filtered.length === 0) {
-    <p class="text-center text-neutral-500">Aucun pokémon trouvé</p>
-    } }
   </div>
 </div>

@@ -6,18 +6,31 @@ import { RouterLink } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import { PokemonCard } from '../../interfaces/pokemon-card';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
+import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-favoris-list',
   standalone: true,
-  imports: [PokemonCardComponent, RouterLink],
+  imports: [PokemonCardComponent, RouterLink, PokemonCardPlaceholderComponent],
   templateUrl: './favoris-list.component.html',
   styles: ``,
 })
 export class FavorisListComponent {
   private pokemons: PokemonCard[] = [];
+  isLoading = true;
+  placeholders = Array(6).fill({});
 
   constructor(public pokemonService: PokemonService) {
+    this.pokemonService
+      .fetchPokemons()
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
+      .subscribe();
+
     this.pokemonService.getPokemons().subscribe((pokemons) => {
       this.pokemons = pokemons;
     });

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap, take } from 'rxjs/operators';
 import { PokemonCard } from '../interfaces/pokemon-card';
 import { PokemonResponse } from '../interfaces/pokemon-response';
 
@@ -13,22 +14,25 @@ export class PokemonService {
   private pokemonSubject = new BehaviorSubject<PokemonCard[]>([]);
   private typesSubject = new BehaviorSubject<string[]>([]);
 
-  fetchPokemons() {
-    this.http
+  fetchPokemons(): Observable<any> {
+    return this.http
       .get(
         'https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[1%20TO%20150]',
       )
-      .subscribe((response: any) => {
-        const data = response.data;
-        const allTypes = new Set<string>();
+      .pipe(
+        tap((response: any) => {
+          const data = response.data;
+          const allTypes = new Set<string>();
 
-        data.forEach((pokemon: PokemonCard) => {
-          pokemon.types?.forEach((type) => allTypes.add(type));
-        });
+          data.forEach((pokemon: PokemonCard) => {
+            pokemon.types?.forEach((type) => allTypes.add(type));
+          });
 
-        this.pokemonSubject.next(data);
-        this.typesSubject.next(Array.from(allTypes));
-      });
+          this.pokemonSubject.next(data);
+          this.typesSubject.next(Array.from(allTypes));
+        }),
+        take(1),
+      );
   }
 
   fetchPokemon(id: string): Observable<PokemonResponse> {

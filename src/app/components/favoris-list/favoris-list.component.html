@@ -5,17 +5,19 @@
     <p class="text-sm text-neutral-400">{{ favoriteCount }} favoris</p>
     }
   </div>
+
   <div class="flex flex-wrap gap-5 items-center justify-center">
-    @for (pokemon of favoritePokemons; track pokemon.id) {
+    @if (isLoading) { @for (placeholder of placeholders; track $index) {
+    <app-pokemon-card-placeholder></app-pokemon-card-placeholder>
+    } } @else { @for (pokemon of favoritePokemons; track pokemon.id) {
     <a routerLink="/pokemon/{{ pokemon.id }}">
       <app-pokemon-card [pokemon]="pokemon" />
     </a>
-    }
+    } }
   </div>
 </div>
 
-@if (favoritePokemons.length > 0) {
-
+@if (!isLoading) { @if (favoritePokemons.length > 0) {
 <div
   class="flex justify-center p-4 margin-top-auto sticky bottom-0 left-0 right-0 border-t bg-neutral-50 border-neutral-300"
 >
@@ -28,4 +30,4 @@
 </div>
 } @else {
 <p class="text-center text-neutral-500 mt-4">Aucun favoris</p>
-}
+} }

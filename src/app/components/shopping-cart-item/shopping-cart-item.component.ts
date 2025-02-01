@@ -75,7 +75,7 @@ export class ShoppingCartComponentItem implements OnInit {
   }
 
   get price(): number {
-    return this.pokemon.tcgplayer.prices.holofoil.market * this.item.quantity;
+    return this.pokemon.cardmarket.prices.averageSellPrice * this.item.quantity;
   }
   changeQuantity(value: number) {
     this.ShoppingCartService.changeQuantity(this.pokemon.id, value);

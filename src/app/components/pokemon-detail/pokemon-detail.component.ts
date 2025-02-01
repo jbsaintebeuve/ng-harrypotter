@@ -5,7 +5,7 @@ import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { SidePanelService } from '../../services/side-panel.service';
 import { PokemonCard } from '../../interfaces/pokemon-card';
 import { PokemonResponse } from '../../interfaces/pokemon-response';
-import { catchError } from 'rxjs/operators';
+import { catchError, retryWhen, delay, take, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
@@ -20,8 +20,9 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
 export class PokemonDetailComponent {
   pokemon: PokemonCard | null = null;
   isFlipped = false;
-
   quantity = 1;
+  isLoading = false;
+  loadingError: string | null = null;
 
   constructor(
     private pokemonService: PokemonService,
@@ -31,15 +32,36 @@ export class PokemonDetailComponent {
     private sidePanelService: SidePanelService,
   ) {
     this.route.params.subscribe((params) => {
+      this.isLoading = true;
+      this.loadingError = null;
+
       this.pokemonService
         .fetchPokemon(params['id'])
         .pipe(
+          retryWhen((errors) =>
+            errors.pipe(
+              tap((err) => {
+                if (err.status !== 429) throw err;
+                this.loadingError =
+                  'Trop de requêtes, nouvelle tentative dans 5 secondes...';
+              }),
+              delay(5000),
+              take(3),
+            ),
+          ),
           catchError((error) => {
+            this.isLoading = false;
+            if (error.status === 429) {
+              this.loadingError =
+                'Impossible de charger le Pokémon. Veuillez réessayer plus tard.';
+            }
             this.router.navigate(['404']);
             return of(null);
           }),
         )
         .subscribe((response: PokemonResponse | null) => {
+          this.isLoading = false;
+          this.loadingError = null;
           if (response && response.data) {
             this.pokemon = response.data;
             console.log(this.pokemon);
