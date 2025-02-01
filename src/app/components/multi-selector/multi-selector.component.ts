@@ -1,10 +1,13 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { faSolidCaretDown } from '@ng-icons/font-awesome/solid';
 
 @Component({
   selector: 'app-multi-selector',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgIconComponent],
+  providers: [provideIcons({ faSolidCaretDown })],
   templateUrl: './multi-selector.component.html',
   styles: ``,
 })

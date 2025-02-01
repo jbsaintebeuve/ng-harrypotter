@@ -30,6 +30,10 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  get cartCount(): number {
+    return this.cart.stock.reduce((acc, item) => acc + item.quantity, 0);
+  }
+
   openSidePanel() {
     this.sidePanelService.toggle();
   }

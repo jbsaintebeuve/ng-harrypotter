@@ -3,21 +3,38 @@
     class="border-4 border-red-500 p-2 text-xs uppercase font-medium bg-white text-neutral-600"
   >
     <div class="flex w-full justify-between">
-      <p class="font-semibold text-neutral-900">{{ pokemon?.name }}</p>
+      <p class="font-semibold text-neutral-900">{{ pokemon.name }}</p>
       <p>
         #{{
-          (pokemon?.nationalPokedexNumbers)![0]
-            ? (pokemon?.nationalPokedexNumbers)![0]
+          pokemon.nationalPokedexNumbers![0]
+            ? pokemon.nationalPokedexNumbers![0]
             : 'undefined'
         }}
       </p>
     </div>
-    <p>{{ pokemon?.rarity ? pokemon?.rarity : 'undefined' }}</p>
-    <p>{{ pokemon?.set?.name ? pokemon?.set?.name : 'undefined' }}</p>
+    <p>{{ pokemon.rarity ? pokemon.rarity : 'undefined' }}</p>
+    <p>{{ pokemon.set.name ? pokemon.set.name : 'undefined' }}</p>
   </div>
   <div class="plastic-case">
     <div class="card">
-      <img src="{{ pokemon?.images?.large }}" alt="{{ pokemon?.name }}" />
+      <img src="{{ pokemon.images.large }}" alt="{{ pokemon.name }}" />
+    </div>
+    <div
+      class="absolute bottom-0 right-0 bg-white border border-neutral-200 px-3 py-3 rounded-full flex items-center"
+    >
+      @if (isFavorite) {
+      <ng-icon
+        (click)="switchFav($event)"
+        class="text-lg text-neutral-700 hover:cursor-pointer select-none pointer-events-auto"
+        name="faSolidHeart"
+      />
+      } @else {
+      <ng-icon
+        (click)="switchFav($event)"
+        class="text-lg text-neutral-600 hover:cursor-pointer select-none pointer-events-auto"
+        name="faHeart"
+      />
+      }
     </div>
   </div>
 </div>

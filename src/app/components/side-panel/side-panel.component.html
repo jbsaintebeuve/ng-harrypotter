@@ -5,7 +5,7 @@
     <div class="flex gap-2 items-center">
       <ng-icon name="faSolidCartShopping" class="text-neutral-700" />
       <h2 class="text-xl font-bold">Panier</h2>
-      <p class="text-sm text-neutral-400">({{ cart.stock.length }} articles)</p>
+      <p class="text-sm text-neutral-400">({{ cartCount }} articles)</p>
     </div>
     <button (click)="prepareClose()" class="text-gray-500 text-xl">
       &times;

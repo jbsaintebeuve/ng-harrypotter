@@ -2,27 +2,28 @@
   <app-search (changeSearchEvent)="onSearch($event)" />
 </div>
 <div class="w-11/12 py-5 mx-auto flex gap-10">
-  <div class="w-1/3 mx-auto mb-4">
-    <app-multi-selector
-      [name]="'Types'"
-      [options]="types"
-      [selectedValues]="selectedTypes"
-      (onSelect)="onCategorySelect($event)"
-    ></app-multi-selector>
-  </div>
-
-  <div class="w-5/6 mx-auto flex flex-col gap-5">
-    <div class="flex gap-5 items-center w-full justify-end">
-      <p class="text-sm text-neutral-500">{{ favoriteCount }} favoris</p>
-      <app-select
-        [name]="'Trier par'"
-        [options]="sortOpt"
-        [selectedIndex]="sortSelected"
-        (selectedChange)="sortSelected = $event"
-      />
+  <div class="w-full mx-auto flex flex-col gap-5">
+    <div class="flex gap-5 items-center w-full justify-between">
+      <div class="w-1/6">
+        <app-multi-selector
+          [name]="'Types'"
+          [options]="types"
+          [selectedValues]="selectedTypes"
+          (onSelect)="onTypesSelect($event)"
+        ></app-multi-selector>
+      </div>
+      <div class="flex gap-5 items-center">
+        <p class="text-sm text-neutral-500 pb-1">{{ favoriteCount }} favoris</p>
+        <app-select
+          [name]="'Trier par'"
+          [options]="sortOpt"
+          [selectedIndex]="sortSelected"
+          (selectedChange)="sortSelected = $event"
+        />
+      </div>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-x-5 gap-y-4">
+    <div class="flex flex-wrap gap-5 items-center justify-center">
       @for (pokemon of pokemons | filterBy:selectedTypes |
       sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc |
       searchFor:searchTerm; track pokemon.id) {
@@ -34,7 +35,7 @@
     @if (pokemons | filterBy:selectedTypes |
     sortBy:(sortOpt[sortSelected].value):sortOpt[sortSelected].asc |
     searchFor:searchTerm; as filtered) { @if (filtered.length === 0) {
-    <p class="text-center text-neutral-500">Aucun produit trouvé</p>
+    <p class="text-center text-neutral-500">Aucun pokémon trouvé</p>
     } }
   </div>
 </div>

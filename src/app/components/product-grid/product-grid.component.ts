@@ -56,7 +56,7 @@ export class ProductGridComponent implements OnInit {
   }
 
   get favoriteCount(): number {
-    return this.productService.getFavoriteCount();
+    return this.pokemonService.getFavoriteCount();
   }
 
   sortOpt = [
@@ -71,7 +71,7 @@ export class ProductGridComponent implements OnInit {
     this.searchTerm = term;
   }
 
-  onCategorySelect(type: string): void {
+  onTypesSelect(type: string): void {
     const index = this.selectedTypes.indexOf(type);
     if (index === -1) {
       this.selectedTypes = [...this.selectedTypes, type];

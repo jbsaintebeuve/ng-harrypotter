@@ -35,14 +35,6 @@ export class SidePanelComponent {
     stock: [],
   };
 
-  product: Product = {
-    id: 0,
-    name: 'test',
-    isFavorite: false,
-    price: 100,
-    createdDate: new Date(),
-  };
-
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
     this.shoppingCartService.totalCart().subscribe((total) => {
@@ -60,6 +52,10 @@ export class SidePanelComponent {
       const hostElement = document.querySelector('app-side-panel');
       hostElement?.classList.add('open');
     }, 0);
+  }
+
+  get cartCount(): number {
+    return this.cart.stock.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   prepareClose() {
