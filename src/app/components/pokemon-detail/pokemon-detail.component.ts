@@ -14,10 +14,11 @@ import { CurrencyPipe } from '@angular/common';
   standalone: true,
   imports: [CurrencyPipe],
   templateUrl: './pokemon-detail.component.html',
-  styles: ``,
+  styleUrls: ['./pokemon-detail.component.scss'],
 })
 export class PokemonDetailComponent {
   pokemon: PokemonCard | undefined;
+  isFlipped = false;
 
   constructor(
     private pokemonService: PokemonService,
@@ -42,5 +43,43 @@ export class PokemonDetailComponent {
           }
         });
     });
+  }
+
+  onMouseMove(event: MouseEvent) {
+    if (this.isFlipped) return;
+    const cardInner = (event.currentTarget as HTMLElement).querySelector(
+      '.card-inner',
+    ) as HTMLElement;
+    const rect = cardInner.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -15;
+    const rotateY = ((x - centerX) / centerX) * 15;
+
+    cardInner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  }
+
+  onMouseLeave() {
+    if (this.isFlipped) return;
+    const cardInner = document.querySelector('.card-inner') as HTMLElement;
+    if (cardInner) {
+      cardInner.style.transform =
+        'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+    }
+  }
+
+  onCardClick(event: MouseEvent) {
+    const cardInner = (event.currentTarget as HTMLElement).querySelector(
+      '.card-inner',
+    ) as HTMLElement;
+    cardInner.classList.add('spinning');
+
+    setTimeout(() => {
+      cardInner.classList.remove('spinning');
+    }, 1600);
   }
 }
