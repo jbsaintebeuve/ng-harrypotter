@@ -5,7 +5,7 @@ import { faHeart } from '@ng-icons/font-awesome/regular';
 @Component({
   selector: 'app-pokemon-card-placeholder',
   standalone: true,
-  imports: [NgIconComponent],
+  imports: [],
   providers: [provideIcons({ faHeart })],
   templateUrl: './pokemon-card-placeholder.component.html',
   styles: ``,

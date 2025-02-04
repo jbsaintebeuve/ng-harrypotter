@@ -8,6 +8,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidTrash } from '@ng-icons/font-awesome/solid';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.component';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -18,6 +19,7 @@ import { RouterLink } from '@angular/router';
     NgFor,
     CurrencyPipe,
     RouterLink,
+    ItemPlaceholderComponent,
   ],
   providers: [provideIcons({ faSolidTrash })],
   templateUrl: './shopping-cart.component.html',
@@ -40,19 +42,25 @@ export class ShoppingCartComponent implements OnInit {
     createdDate: new Date(),
   };
 
+  isLoading = true;
+  placeholders = Array(3).fill({});
+
   constructor(private shoppingCartService: ShoppingCartService) {}
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
     this.shoppingCartService.totalCart().subscribe((total) => {
       this.cart.total_price = total;
+      this.isLoading = false;
     });
   }
 
   onCartUpdate() {
+    this.isLoading = true;
     this.cart = this.shoppingCartService.getCart();
     this.shoppingCartService.totalCart().subscribe((total) => {
       this.cart.total_price = total;
+      this.isLoading = false;
     });
   }
 

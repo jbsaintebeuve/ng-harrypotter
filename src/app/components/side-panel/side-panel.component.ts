@@ -10,6 +10,7 @@ import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-i
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { RouterLink } from '@angular/router';
+import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.component';
 
 @Component({
   selector: 'app-side-panel',
@@ -19,6 +20,7 @@ import { RouterLink } from '@angular/router';
     NgIconComponent,
     ShoppingCartComponentItem,
     RouterLink,
+    ItemPlaceholderComponent,
   ],
   providers: [provideIcons({ faSolidCartShopping })],
   templateUrl: './side-panel.component.html',
@@ -35,16 +37,15 @@ export class SidePanelComponent {
     stock: [],
   };
 
-  ngOnInit() {
-    this.cart = this.shoppingCartService.getCart();
-    this.shoppingCartService.totalCart().subscribe((total) => {
-      this.cart.total_price = total;
-    });
+  isLoading = true;
+  placeholders = Array(3).fill({});
 
+  ngOnInit() {
     this.shoppingCartService.cart$.subscribe((cart) => {
       this.cart = cart;
       this.shoppingCartService.totalCart().subscribe((total) => {
         this.cart.total_price = total;
+        this.isLoading = false;
       });
     });
 

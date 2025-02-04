@@ -1,7 +1,7 @@
 <div class="w-5/6 mx-auto flex flex-col gap-4">
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl text-neutral-700">Panier</h1>
-    @if (cart.stock.length > 0) {
+    @if (!isLoading && cart.stock.length > 0) {
     <button
       class="text-neutral-500 hover:text-neutral-600 flex items-center gap-1 text-xs"
       (click)="clearCart()"
@@ -11,7 +11,18 @@
     </button>
     }
   </div>
-  @if (cart.stock.length > 0) {
+
+  @if (isLoading) {
+  <div
+    class="grid grid-cols-3 items-center justify-between w-full mt-5 uppercase text-sm font-semibold px-4"
+  >
+    <p>Produit</p>
+    <p class="text-center">Quantité</p>
+    <p class="text-right">Prix</p>
+  </div>
+  @for (placeholder of placeholders; track $index) {
+  <app-item-placeholder />
+  } } @else if (cart.stock.length > 0) {
   <div
     class="grid grid-cols-3 items-center justify-between w-full mt-5 uppercase text-sm font-semibold px-4"
   >
