@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { PokemonCard } from '../../interfaces/pokemon-card';
 import { FilterByPipe } from '../../pipes/filter-by.pipe';
 import { SearchForPipe } from '../../pipes/search-for.pipe';
@@ -35,6 +35,7 @@ export class ProductGridComponent implements OnInit {
   constructor(
     public productService: ProductService,
     private pokemonService: PokemonService,
+    private route: ActivatedRoute,
   ) {}
   @Input() searchTerm: string = '';
 
@@ -47,6 +48,12 @@ export class ProductGridComponent implements OnInit {
   selectedTypes: string[] = [];
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (params['search']) {
+        this.searchTerm = params['search'];
+      }
+    });
+
     this.pokemonService
       .fetchPokemons()
       .pipe(

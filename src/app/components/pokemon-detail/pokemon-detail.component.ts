@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { SidePanelService } from '../../services/side-panel.service';
 import { PokemonCard } from '../../interfaces/pokemon-card';
@@ -13,7 +13,7 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
 @Component({
   selector: 'app-pokemon-detail',
   standalone: true,
-  imports: [CurrencyPipe, QuantitySelectorComponent],
+  imports: [CurrencyPipe, QuantitySelectorComponent, RouterLink],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss'],
 })

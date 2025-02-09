@@ -50,6 +50,22 @@
       <p>Dégâts: {{ attack.damage }}</p>
       <p>Coût: {{ attack.convertedEnergyCost }}</p>
       <p>Texte: {{ attack.text }}</p>
+      } @if (pokemon?.evolvesFrom || pokemon?.evolvesTo) {
+      <div class="flex flex-row gap-2">
+        <p>Évolution:</p>
+        <a
+          [routerLink]="['/']"
+          [queryParams]="{ search: pokemon?.evolvesFrom }"
+          >{{ pokemon?.evolvesFrom }}</a
+        >
+        <p class="text-red-500">{{ pokemon?.name }}</p>
+        @if (pokemon?.evolvesTo && pokemon?.evolvesTo?.length) { @for (evolution
+        of pokemon?.evolvesTo; track $index) {
+        <a [routerLink]="['/']" [queryParams]="{ search: evolution }">{{
+          evolution
+        }}</a>
+        } }
+      </div>
       }
       <p>
         Prix moyen:

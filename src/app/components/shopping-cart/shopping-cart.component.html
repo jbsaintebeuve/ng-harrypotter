@@ -21,7 +21,7 @@
     <p class="text-right">Prix</p>
   </div>
   @for (placeholder of placeholders; track $index) {
-  <app-item-placeholder />
+  <app-item-placeholder [minimized]="false" />
   } } @else if (cart.stock.length > 0) {
   <div
     class="grid grid-cols-3 items-center justify-between w-full mt-5 uppercase text-sm font-semibold px-4"
@@ -32,6 +32,7 @@
   </div>
   <app-shopping-cart-item
     [item]="item"
+    [minimized]="false"
     (cartUpdated)="onCartUpdate()"
     *ngFor="let item of cart.stock"
   >

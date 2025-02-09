@@ -1,5 +1,5 @@
 <div class="w-2/3 mx-auto mb-4">
-  <app-search (changeSearchEvent)="onSearch($event)" />
+  <app-search [search]="searchTerm" (changeSearchEvent)="onSearch($event)" />
 </div>
 <div class="w-11/12 py-5 mx-auto flex gap-10">
   <div class="w-full mx-auto flex flex-col gap-5">

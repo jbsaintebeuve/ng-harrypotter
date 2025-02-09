@@ -41,6 +41,12 @@ export class PokemonService {
     );
   }
 
+  fetchPokemonByName(name: string): Observable<PokemonResponse> {
+    return this.http.get<PokemonResponse>(
+      `https://api.pokemontcg.io/v2/cards?q=name:${name}`,
+    );
+  }
+
   getPokemons(): Observable<PokemonCard[]> {
     return this.pokemonSubject.asObservable();
   }

@@ -1,4 +1,9 @@
-import { CurrencyPipe, DecimalPipe, UpperCasePipe } from '@angular/common';
+import {
+  CurrencyPipe,
+  DecimalPipe,
+  NgIf,
+  UpperCasePipe,
+} from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidImage, faSolidTrash } from '@ng-icons/font-awesome/solid';
@@ -22,6 +27,7 @@ import { PokemonResponse } from '../../interfaces/pokemon-response';
     // DecimalPipe,
     UpperCasePipe,
     RouterLink,
+    NgIf,
   ],
   providers: [provideIcons({ faSolidImage, faSolidTrash })],
   templateUrl: './shopping-cart-item.component.html',
@@ -75,6 +81,9 @@ export class ShoppingCartComponentItem implements OnInit {
   }
 
   get price(): number {
+    if (!this.pokemon.cardmarket) {
+      return 0;
+    }
     return this.pokemon.cardmarket.prices.averageSellPrice * this.item.quantity;
   }
   changeQuantity(value: number) {

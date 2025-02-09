@@ -5,7 +5,8 @@ export interface PokemonCard {
   subtypes: string[];
   hp: string;
   types: string[];
-  evolvesTo?: string[];
+  evolvesTo: string[];
+  evolvesFrom: string;
   attacks: Attack[];
   weaknesses: Weakness[];
   retreatCost: string[];

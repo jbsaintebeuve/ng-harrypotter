@@ -10,6 +10,7 @@
     </div> -->
     <img
       class="w-14 h-auto"
+      *ngIf="pokemon?.images"
       [src]="pokemon.images.small"
       [alt]="pokemon.name"
     />
@@ -43,6 +44,7 @@
     </div> -->
     <img
       class="w-14 h-auto"
+      *ngIf="pokemon?.images"
       [src]="pokemon.images.small"
       [alt]="pokemon.name"
     />
@@ -53,7 +55,7 @@
       >
         {{ pokemon.name | uppercase }}
       </a>
-      <p class="text-neutral-400 text-xs">
+      <p class="text-neutral-400 text-xs" *ngIf="pokemon.cardmarket">
         {{ quantity }} x
         {{
           pokemon.cardmarket.prices.averageSellPrice
