@@ -1,51 +1,101 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { PokemonCard } from '../../interfaces/pokemon-card';
+import { FilterByPipe } from '../../pipes/filter-by.pipe';
 import { SearchForPipe } from '../../pipes/search-for.pipe';
 import { SortByPipe } from '../../pipes/sort-by.pipe';
-import { ProductService } from '../../services/product.service';
-import { ProductCardComponent } from '../product-card/product-card.component';
-import { SelectComponent } from '../select/select.component';
-import { Product } from '../../interfaces/product';
+import { PokemonService } from '../../services/pokemon.service';
+import { MultiSelectorComponent } from '../multi-selector/multi-selector.component';
+import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
+import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { SearchComponent } from '../search/search.component';
-import { RouterLink } from '@angular/router';
+import { SelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'app-product-grid',
   standalone: true,
   imports: [
-    ProductCardComponent,
     FormsModule,
     SortByPipe,
     SearchForPipe,
     SelectComponent,
     SearchComponent,
     RouterLink,
+    MultiSelectorComponent,
+    PokemonCardComponent,
+    FilterByPipe,
+    PokemonCardPlaceholderComponent,
   ],
   templateUrl: './product-grid.component.html',
 })
 export class ProductGridComponent implements OnInit {
-  constructor(public productService: ProductService) {}
+  constructor(
+    private pokemonService: PokemonService,
+    private route: ActivatedRoute,
+  ) {}
   @Input() searchTerm: string = '';
-  products: Product[] = [];
+
+  pokemons: PokemonCard[] = [];
+
+  isLoading = true;
+  placeholders = Array(12).fill({});
+
+  types: string[] = [];
+  selectedTypes: string[] = [];
 
   ngOnInit(): void {
-    this.products = this.productService.getProducts();
-    this.productService.getFav();
+    this.route.queryParams.subscribe((params) => {
+      if (params['search']) {
+        this.searchTerm = params['search'];
+      }
+    });
+
+    this.pokemonService
+      .fetchPokemons()
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        }),
+      )
+      .subscribe();
+
+    this.pokemonService.getPokemons().subscribe({
+      next: (pokemons) => {
+        this.pokemons = pokemons;
+      },
+    });
+
+    this.pokemonService.getTypes().subscribe({
+      next: (types) => {
+        this.types = types;
+      },
+    });
   }
 
   get favoriteCount(): number {
-    return this.productService.getFavoriteCount();
+    return this.pokemonService.getFavoriteCount();
   }
 
   sortOpt = [
     { name: 'A-Z', value: 'name', asc: true },
     { name: 'Z-A', value: 'name', asc: false },
-    { name: 'Plus récente', value: 'date', asc: false },
-    { name: 'Plus ancienne', value: 'date', asc: true },
+    { name: 'HP 0-9', value: 'hp', asc: true },
+    { name: 'HP 9-0', value: 'hp', asc: false },
   ];
   sortSelected: number = 0;
 
   onSearch(term: string) {
     this.searchTerm = term;
+  }
+
+  onTypesSelect(type: string): void {
+    const index = this.selectedTypes.indexOf(type);
+    if (index === -1) {
+      this.selectedTypes = [...this.selectedTypes, type];
+    } else {
+      this.selectedTypes = this.selectedTypes.filter((t) => t !== type);
+    }
   }
 }

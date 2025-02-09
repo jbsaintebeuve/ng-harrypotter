@@ -1,13 +1,15 @@
-import { CurrencyPipe, DecimalPipe, UpperCasePipe } from '@angular/common';
+import { CurrencyPipe, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidImage, faSolidTrash } from '@ng-icons/font-awesome/solid';
-import { Product } from '../../interfaces/product';
+import { catchError, of } from 'rxjs';
+import { PokemonCard } from '../../interfaces/pokemon-card';
+import { PokemonResponse } from '../../interfaces/pokemon-response';
 import { ShoppingCartProduct } from '../../interfaces/shopping-cart';
-import { ProductService } from '../../services/product.service';
-import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
+import { PokemonService } from '../../services/pokemon.service';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { RouterLink } from '@angular/router';
+import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 @Component({
   selector: 'app-shopping-cart-item',
   standalone: true,
@@ -15,9 +17,10 @@ import { RouterLink } from '@angular/router';
     NgIconComponent,
     QuantitySelectorComponent,
     CurrencyPipe,
-    DecimalPipe,
+    // DecimalPipe,
     UpperCasePipe,
     RouterLink,
+    NgIf,
   ],
   providers: [provideIcons({ faSolidImage, faSolidTrash })],
   templateUrl: './shopping-cart-item.component.html',
@@ -26,33 +29,46 @@ import { RouterLink } from '@angular/router';
 export class ShoppingCartComponentItem implements OnInit {
   @Input() minimized = false;
   @Input({ required: true }) item: ShoppingCartProduct = {
-    id: 0,
+    id: '',
     quantity: 0,
   };
 
-  product: Product = {
-    id: 0,
-    name: '',
-    isFavorite: false,
-    price: 0,
-    createdDate: new Date(),
-  };
+  pokemon: PokemonCard = {} as PokemonCard;
   quantity = 1;
-  data = localStorage.getItem('ng_hp_cart');
-  products: Product[] = this.data ? JSON.parse(this.data) : [];
-  cart: Product[] = [...this.products];
+  data = localStorage.getItem('ng_poke_cart');
+  // products: Product[] = this.data ? JSON.parse(this.data) : [];
+  pokemons: PokemonCard[] = this.data ? JSON.parse(this.data) : [];
+  cart: PokemonCard[] = [...this.pokemons];
 
   @Output() addItemEvent = new EventEmitter<number>();
   @Output() cartUpdated = new EventEmitter<void>();
 
   constructor(
-    private productService: ProductService,
+    // private productService: ProductService,
+    private pokemonService: PokemonService,
     private ShoppingCartService: ShoppingCartService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
-    const fetchedProduct = this.productService.getProduct(this.item.id);
-    this.product = fetchedProduct ? fetchedProduct : this.product;
+    this.pokemonService
+      .fetchPokemon(this.item.id)
+      .pipe(
+        catchError((error) => {
+          if (error.status === 429) {
+            console.log(
+              'Impossible de charger le Pokémon. Veuillez réessayer plus tard.',
+            );
+          }
+          this.router.navigate(['404']);
+          return of(null);
+        }),
+      )
+      .subscribe((response: PokemonResponse | null) => {
+        if (response && response.data) {
+          this.pokemon = response.data;
+        }
+      });
 
     this.ShoppingCartService.cart$.subscribe((cart) => {
       const updatedItem = cart.stock.find((item) => item.id === this.item.id);
@@ -64,13 +80,16 @@ export class ShoppingCartComponentItem implements OnInit {
   }
 
   get price(): number {
-    return this.product.price * this.item.quantity;
+    if (!this.pokemon.cardmarket) {
+      return 0;
+    }
+    return this.pokemon.cardmarket.prices.averageSellPrice * this.item.quantity;
   }
   changeQuantity(value: number) {
-    this.ShoppingCartService.changeQuantity(this.product.id, value);
+    this.ShoppingCartService.changeQuantity(this.pokemon.id, value);
   }
   removeFromCart() {
-    this.ShoppingCartService.removeFromCart(this.product.id);
+    this.ShoppingCartService.removeFromCart(this.pokemon.id);
     this.cartUpdated.emit();
   }
   onChangeQuantity(value: number) {

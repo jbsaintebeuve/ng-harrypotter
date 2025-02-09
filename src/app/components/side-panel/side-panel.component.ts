@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../services/product.service';
-import { SidePanelService } from '../../services/side-panel.service';
-import { Product } from '../../interfaces/product';
-import { ProductCardComponent } from '../product-card/product-card.component';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
-import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { RouterLink } from '@angular/router';
+import { SidePanelService } from '../../services/side-panel.service';
+import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.component';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 
 @Component({
   selector: 'app-side-panel',
@@ -19,6 +17,7 @@ import { RouterLink } from '@angular/router';
     NgIconComponent,
     ShoppingCartComponentItem,
     RouterLink,
+    ItemPlaceholderComponent,
   ],
   providers: [provideIcons({ faSolidCartShopping })],
   templateUrl: './side-panel.component.html',
@@ -35,27 +34,31 @@ export class SidePanelComponent {
     stock: [],
   };
 
-  product: Product = {
-    id: 0,
-    name: 'test',
-    isFavorite: false,
-    price: 100,
-    createdDate: new Date(),
-  };
+  isLoading = true;
+  placeholders = Array(3).fill({});
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
-    this.cart.total_price = this.shoppingCartService.totalCart();
 
     this.shoppingCartService.cart$.subscribe((cart) => {
-      this.cart = cart;
-      this.cart.total_price = this.shoppingCartService.totalCart();
+      if (cart) {
+        this.cart = cart;
+        this.isLoading = false;
+      }
+    });
+
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
     });
 
     setTimeout(() => {
       const hostElement = document.querySelector('app-side-panel');
       hostElement?.classList.add('open');
     }, 0);
+  }
+
+  get cartCount(): number {
+    return this.cart.stock.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   prepareClose() {

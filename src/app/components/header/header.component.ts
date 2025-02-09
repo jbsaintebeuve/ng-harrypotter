@@ -25,9 +25,17 @@ export class HeaderComponent implements OnInit {
     stock: [],
   };
   ngOnInit() {
+    this.cart = this.shoppingCartService.getCart();
+
     this.shoppingCartService.cart$.subscribe((cart) => {
-      this.cart = cart;
+      if (cart) {
+        this.cart = cart;
+      }
     });
+  }
+
+  get cartCount(): number {
+    return this.cart.stock.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   openSidePanel() {

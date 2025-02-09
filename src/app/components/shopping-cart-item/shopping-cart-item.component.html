@@ -3,24 +3,28 @@
   class="flex items-center justify-between p-4 border-t border-neutral-200 w-full"
 >
   <div class="flex items-center gap-4">
-    <div
-      class="w-14 h-14 rounded overflow-hidden bg-neutral-600 flex items-center justify-center"
-    >
-      <ng-icon class="text-white text-2xl" name="faSolidImage" />
-    </div>
+    <img
+      class="w-14 h-auto"
+      *ngIf="pokemon?.images"
+      [src]="pokemon.images.small"
+      [alt]="pokemon.name"
+    />
     <div class="flex flex-col justify-between gap-1 items-start">
       <p class="text-normal font-semibold text-gray-800">
-        {{ product.name | uppercase }}
+        {{ pokemon.name | uppercase }}
       </p>
-      <p class="text-neutral-400 text-xs">
+      <p class="text-neutral-400 text-xs" *ngIf="pokemon.cardmarket">
         {{ quantity }} x
-        {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
+        {{
+          pokemon.cardmarket.prices.averageSellPrice
+            | currency : 'EUR' : 'symbol' : '' : 'fr'
+        }}
       </p>
     </div>
   </div>
 
   <p class="text-normal font-semibold text-gray-800 text-right">
-    {{ price | currency : 'EUR' : true : '' : 'fr' }}
+    {{ price | currency : 'EUR' : 'symbol' : '' : 'fr' }}
   </p>
 </div>
 } @else {
@@ -28,21 +32,25 @@
   class="grid grid-cols-3 items-center justify-between p-4 border-t border-neutral-200 w-full"
 >
   <div class="flex items-center gap-4">
-    <div
-      class="w-10 h-10 md:w-20 md:h-20 rounded overflow-hidden bg-neutral-600 flex items-center justify-center"
-    >
-      <ng-icon class="text-white text-lg md:text-4xl" name="faSolidImage" />
-    </div>
+    <img
+      class="w-14 h-auto"
+      *ngIf="pokemon?.images"
+      [src]="pokemon.images.small"
+      [alt]="pokemon.name"
+    />
     <div class="flex flex-col justify-between gap-1 items-start">
       <a
-        routerLink="/product/{{ product.id }}"
+        routerLink="/pokemon/{{ pokemon.id }}"
         class="text-sm md:text-lg font-semibold text-gray-800"
       >
-        {{ product.name | uppercase }}
+        {{ pokemon.name | uppercase }}
       </a>
-      <p class="text-neutral-400 text-xs">
+      <p class="text-neutral-400 text-xs" *ngIf="pokemon.cardmarket">
         {{ quantity }} x
-        {{ product.price | number | currency : 'EUR' : true : '' : 'fr' }}
+        {{
+          pokemon.cardmarket.prices.averageSellPrice
+            | currency : 'EUR' : 'symbol' : '' : 'fr'
+        }}
       </p>
     </div>
   </div>
@@ -61,7 +69,7 @@
   </div>
 
   <p class="text-sm md:text-lg font-semibold text-gray-800 text-right">
-    {{ price | currency : 'EUR' : true : '' : 'fr' }}
+    {{ price | currency : 'EUR' : 'symbol' : '' : 'fr' }}
   </p>
 </div>
 }

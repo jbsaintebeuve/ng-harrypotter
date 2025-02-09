@@ -1,30 +1,52 @@
 import { Component } from '@angular/core';
-import { ProductService } from '../../services/product.service';
-import { Product } from '../../interfaces/product';
-import { ProductCardComponent } from '../product-card/product-card.component';
 import { RouterLink } from '@angular/router';
+import { finalize } from 'rxjs/operators';
+import { PokemonCard } from '../../interfaces/pokemon-card';
+import { PokemonService } from '../../services/pokemon.service';
+import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
+import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
   selector: 'app-favoris-list',
   standalone: true,
-  imports: [ProductCardComponent, RouterLink],
+  imports: [PokemonCardComponent, RouterLink, PokemonCardPlaceholderComponent],
   templateUrl: './favoris-list.component.html',
   styles: ``,
 })
 export class FavorisListComponent {
-  constructor(public productService: ProductService) {}
+  private pokemons: PokemonCard[] = [];
+  isLoading = true;
+  placeholders = Array(6).fill({});
 
-  get favoriteCount(): number {
-    return this.productService.getFavoriteCount();
+  constructor(public pokemonService: PokemonService) {
+    if (this.pokemonService.getFav().length === 0) {
+      this.isLoading = false;
+    } else {
+      this.pokemonService
+        .fetchPokemons()
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          }),
+        )
+        .subscribe();
+
+      this.pokemonService.getPokemons().subscribe((pokemons) => {
+        this.pokemons = pokemons;
+      });
+    }
   }
 
-  get favoriteProducts(): Product[] {
-    // return this.productService.products.filter((p) => p.isFavorite);
-    const fav = this.productService.getFav();
-    return this.productService.products.filter((p) => fav.includes(p.id));
+  get favoriteCount(): number {
+    return this.pokemonService.getFavoriteCount();
+  }
+
+  get favoritePokemons(): PokemonCard[] {
+    const favIds = this.pokemonService.getFav();
+    return this.pokemons.filter((pokemon) => favIds.includes(pokemon.id));
   }
 
   clearFavorites() {
-    this.productService.clearFav();
+    this.pokemonService.clearFav();
   }
 }

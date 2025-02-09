@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ShoppingCart, ShoppingCartProduct } from '../interfaces/shopping-cart';
-import { ProductService } from './product.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { PokemonService } from './pokemon.service';
+import { BehaviorSubject, Observable, forkJoin, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,7 @@ export class ShoppingCartService {
   static cart$: any;
 
   getCart(): ShoppingCart {
-    const storedCart = localStorage.getItem('ng-hp-cart');
+    const storedCart = localStorage.getItem('ng-poke-cart');
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     } else {
@@ -34,13 +34,13 @@ export class ShoppingCartService {
   }
 
   private updateCart() {
-    this.totalCart();
-    localStorage.setItem('ng-hp-cart', JSON.stringify(this.cart));
+    // this.totalCart();
+    localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
     this.cartSubject.next({ ...this.cart });
   }
 
-  addToCart(productId: number, quantity: number) {
-    const storedCart = localStorage.getItem('ng-hp-cart');
+  addToCart(productId: string, quantity: number) {
+    const storedCart = localStorage.getItem('ng-poke-cart');
     if (storedCart) {
       this.cart = JSON.parse(storedCart);
     }
@@ -58,17 +58,17 @@ export class ShoppingCartService {
     this.updateCart();
   }
 
-  removeFromCart(productId: number): ShoppingCart {
+  removeFromCart(productId: string): ShoppingCart {
     this.cart.stock = this.cart.stock.filter(
       (p: ShoppingCartProduct) => p.id !== productId,
     );
-    localStorage.setItem('ng-hp-cart', JSON.stringify(this.cart));
-    this.totalCart();
+    localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
+    // this.totalCart();
     this.updateCart();
     return this.cart;
   }
 
-  changeQuantity(productId: number, quantity: number) {
+  changeQuantity(productId: string, quantity: number) {
     const index = this.cart.stock.findIndex(
       (p: ShoppingCartProduct) => p.id === productId,
     );
@@ -87,23 +87,36 @@ export class ShoppingCartService {
       total_price: 0,
       stock: [],
     };
-    localStorage.setItem('ng-hp-cart', JSON.stringify(this.cart));
-    this.totalCart();
+    localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
+    // this.totalCart();
     this.updateCart();
     return this.cart;
   }
 
-  totalCart() {
-    let total = 0;
-    this.cart.stock.forEach((p: ShoppingCartProduct) => {
-      if (p.id) {
-        const price = this.productService.getProduct(p.id)?.price || 0;
-        total += price * p.quantity;
-      }
-    });
-    this.cart.total_price = total;
-    return total;
+  totalCart(): Observable<number> {
+    if (this.cart.stock.length === 0) {
+      return of(0);
+    }
+
+    const pokemonRequests = this.cart.stock.map((item) =>
+      this.pokemonService.fetchPokemon(item.id).pipe(
+        map((response) => {
+          const price =
+            response.data?.cardmarket?.prices?.averageSellPrice || 0;
+          return price * item.quantity;
+        }),
+      ),
+    );
+
+    return forkJoin(pokemonRequests).pipe(
+      map((prices) => {
+        const total = prices.reduce((sum, price) => sum + price, 0);
+        this.cart.total_price = total;
+        this.updateCart();
+        return total;
+      }),
+    );
   }
 
-  constructor(private productService: ProductService) {}
+  constructor(private pokemonService: PokemonService) {}
 }
