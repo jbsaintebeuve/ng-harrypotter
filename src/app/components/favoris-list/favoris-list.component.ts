@@ -19,18 +19,22 @@ export class FavorisListComponent {
   placeholders = Array(6).fill({});
 
   constructor(public pokemonService: PokemonService) {
-    this.pokemonService
-      .fetchPokemons()
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        }),
-      )
-      .subscribe();
+    if (this.pokemonService.getFav().length === 0) {
+      this.isLoading = false;
+    } else {
+      this.pokemonService
+        .fetchPokemons()
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          }),
+        )
+        .subscribe();
 
-    this.pokemonService.getPokemons().subscribe((pokemons) => {
-      this.pokemons = pokemons;
-    });
+      this.pokemonService.getPokemons().subscribe((pokemons) => {
+        this.pokemons = pokemons;
+      });
+    }
   }
 
   get favoriteCount(): number {
