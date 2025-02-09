@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
@@ -25,7 +25,7 @@ import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.c
   templateUrl: './shopping-cart.component.html',
   styles: ``,
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, OnChanges {
   cart: ShoppingCart = {
     total_price: 0,
     stock: [
@@ -49,10 +49,18 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
-    this.shoppingCartService.totalCart().subscribe((total) => {
-      this.cart.total_price = total;
-      this.isLoading = false;
+
+    this.shoppingCartService.cart$.subscribe((cart) => {
+      this.cart = cart;
+      this.shoppingCartService.totalCart().subscribe((total) => {
+        this.cart.total_price = total;
+        this.isLoading = false;
+      });
     });
+  }
+
+  ngOnChanges() {
+    this.onCartUpdate();
   }
 
   onCartUpdate() {

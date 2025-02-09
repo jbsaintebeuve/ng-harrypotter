@@ -12,10 +12,10 @@ import { ShoppingCartProduct } from '../../interfaces/shopping-cart';
 import { ProductService } from '../../services/product.service';
 import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import { PokemonCard } from '../../interfaces/pokemon-card';
-import { catchError } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { PokemonResponse } from '../../interfaces/pokemon-response';
 @Component({
   selector: 'app-shopping-cart-item',
@@ -54,6 +54,7 @@ export class ShoppingCartComponentItem implements OnInit {
     // private productService: ProductService,
     private pokemonService: PokemonService,
     private ShoppingCartService: ShoppingCartService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -61,8 +62,13 @@ export class ShoppingCartComponentItem implements OnInit {
       .fetchPokemon(this.item.id)
       .pipe(
         catchError((error) => {
-          console.error(error);
-          return [];
+          if (error.status === 429) {
+            console.log(
+              'Impossible de charger le Pokémon. Veuillez réessayer plus tard.',
+            );
+          }
+          this.router.navigate(['404']);
+          return of(null);
         }),
       )
       .subscribe((response: PokemonResponse | null) => {

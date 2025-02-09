@@ -41,12 +41,17 @@ export class SidePanelComponent {
   placeholders = Array(3).fill({});
 
   ngOnInit() {
+    this.cart = this.shoppingCartService.getCart();
+
     this.shoppingCartService.cart$.subscribe((cart) => {
-      this.cart = cart;
-      this.shoppingCartService.totalCart().subscribe((total) => {
-        this.cart.total_price = total;
+      if (cart) {
+        this.cart = cart;
         this.isLoading = false;
-      });
+      }
+    });
+
+    this.shoppingCartService.totalCart().subscribe((total) => {
+      this.cart.total_price = total;
     });
 
     setTimeout(() => {

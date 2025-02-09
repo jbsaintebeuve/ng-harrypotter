@@ -47,17 +47,6 @@ export class PokemonDetailComponent {
       this.pokemonService
         .fetchPokemon(params['id'])
         .pipe(
-          retryWhen((errors) =>
-            errors.pipe(
-              tap((err) => {
-                if (err.status !== 429) throw err;
-                this.loadingError =
-                  'Trop de requêtes, nouvelle tentative dans 5 secondes...';
-              }),
-              delay(5000),
-              take(3),
-            ),
-          ),
           catchError((error) => {
             this.isLoading = false;
             if (error.status === 429) {
@@ -73,7 +62,6 @@ export class PokemonDetailComponent {
           this.loadingError = null;
           if (response && response.data) {
             this.pokemon = response.data;
-            console.log(this.pokemon);
           }
         });
     });

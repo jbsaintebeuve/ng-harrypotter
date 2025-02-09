@@ -3,11 +3,6 @@
   class="flex items-center justify-between p-4 border-t border-neutral-200 w-full"
 >
   <div class="flex items-center gap-4">
-    <!-- <div
-      class="w-14 h-14 rounded overflow-hidden bg-neutral-600 flex items-center justify-center"
-    >
-      <ng-icon class="text-white text-2xl" name="faSolidImage" />
-    </div> -->
     <img
       class="w-14 h-auto"
       *ngIf="pokemon?.images"
@@ -18,18 +13,18 @@
       <p class="text-normal font-semibold text-gray-800">
         {{ pokemon.name | uppercase }}
       </p>
-      <p class="text-neutral-400 text-xs">
+      <p class="text-neutral-400 text-xs" *ngIf="pokemon.cardmarket">
         {{ quantity }} x
         {{
           pokemon.cardmarket.prices.averageSellPrice
-            | currency : 'EUR' : true : '' : 'fr'
+            | currency : 'EUR' : 'symbol' : '' : 'fr'
         }}
       </p>
     </div>
   </div>
 
   <p class="text-normal font-semibold text-gray-800 text-right">
-    {{ price | currency : 'EUR' : true : '' : 'fr' }}
+    {{ price | currency : 'EUR' : 'symbol' : '' : 'fr' }}
   </p>
 </div>
 } @else {
@@ -37,11 +32,6 @@
   class="grid grid-cols-3 items-center justify-between p-4 border-t border-neutral-200 w-full"
 >
   <div class="flex items-center gap-4">
-    <!-- <div
-      class="w-10 h-10 md:w-20 md:h-20 rounded overflow-hidden bg-neutral-600 flex items-center justify-center"
-    >
-      <ng-icon class="text-white text-lg md:text-4xl" name="faSolidImage" />
-    </div> -->
     <img
       class="w-14 h-auto"
       *ngIf="pokemon?.images"
@@ -59,7 +49,7 @@
         {{ quantity }} x
         {{
           pokemon.cardmarket.prices.averageSellPrice
-            | currency : 'EUR' : true : '' : 'fr'
+            | currency : 'EUR' : 'symbol' : '' : 'fr'
         }}
       </p>
     </div>
@@ -79,7 +69,7 @@
   </div>
 
   <p class="text-sm md:text-lg font-semibold text-gray-800 text-right">
-    {{ price | currency : 'EUR' : true : '' : 'fr' }}
+    {{ price | currency : 'EUR' : 'symbol' : '' : 'fr' }}
   </p>
 </div>
 }
