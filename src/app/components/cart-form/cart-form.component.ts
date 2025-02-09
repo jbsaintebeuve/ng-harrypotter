@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Product } from '../../interfaces/product';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { FormInputComponent } from '../form-input/form-input.component';
@@ -34,18 +33,7 @@ export class CartFormComponent {
 
   cart: ShoppingCart = {
     total_price: 0,
-    stock: [
-      // { id: 4, quantity: 2 },
-      // { id: 2, quantity: 10 },
-    ],
-  };
-
-  product: Product = {
-    id: 0,
-    name: 'test',
-    isFavorite: false,
-    price: 100,
-    createdDate: new Date(),
+    stock: [],
   };
 
   checkoutForm: FormGroup;

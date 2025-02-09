@@ -1,22 +1,15 @@
-import {
-  CurrencyPipe,
-  DecimalPipe,
-  NgIf,
-  UpperCasePipe,
-} from '@angular/common';
+import { CurrencyPipe, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidImage, faSolidTrash } from '@ng-icons/font-awesome/solid';
-import { Product } from '../../interfaces/product';
-import { ShoppingCartProduct } from '../../interfaces/shopping-cart';
-import { ProductService } from '../../services/product.service';
-import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
-import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { Router, RouterLink } from '@angular/router';
-import { PokemonService } from '../../services/pokemon.service';
-import { PokemonCard } from '../../interfaces/pokemon-card';
 import { catchError, of } from 'rxjs';
+import { PokemonCard } from '../../interfaces/pokemon-card';
 import { PokemonResponse } from '../../interfaces/pokemon-response';
+import { ShoppingCartProduct } from '../../interfaces/shopping-cart';
+import { PokemonService } from '../../services/pokemon.service';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 @Component({
   selector: 'app-shopping-cart-item',
   standalone: true,

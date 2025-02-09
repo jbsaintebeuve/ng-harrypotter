@@ -1,14 +1,12 @@
+import { CurrencyPipe, NgFor } from '@angular/common';
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { NgFor } from '@angular/common';
-import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
-import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { ShoppingCart } from '../../interfaces/shopping-cart';
-import { Product } from '../../interfaces/product';
+import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidTrash } from '@ng-icons/font-awesome/solid';
-import { CurrencyPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ShoppingCart } from '../../interfaces/shopping-cart';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.component';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -28,18 +26,7 @@ import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.c
 export class ShoppingCartComponent implements OnInit, OnChanges {
   cart: ShoppingCart = {
     total_price: 0,
-    stock: [
-      // { id: 4, quantity: 2 },
-      // { id: 2, quantity: 10 },
-    ],
-  };
-
-  product: Product = {
-    id: 0,
-    name: 'test',
-    isFavorite: false,
-    price: 100,
-    createdDate: new Date(),
+    stock: [],
   };
 
   isLoading = true;

@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import { ProductService } from '../../services/product.service';
-import { Product } from '../../interfaces/product';
-import { ProductCardComponent } from '../product-card/product-card.component';
 import { RouterLink } from '@angular/router';
-import { PokemonService } from '../../services/pokemon.service';
-import { PokemonCard } from '../../interfaces/pokemon-card';
-import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
-import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
 import { finalize } from 'rxjs/operators';
+import { PokemonCard } from '../../interfaces/pokemon-card';
+import { PokemonService } from '../../services/pokemon.service';
+import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
+import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
   selector: 'app-favoris-list',

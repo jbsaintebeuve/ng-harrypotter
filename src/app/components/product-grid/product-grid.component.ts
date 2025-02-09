@@ -1,18 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 import { PokemonCard } from '../../interfaces/pokemon-card';
 import { FilterByPipe } from '../../pipes/filter-by.pipe';
 import { SearchForPipe } from '../../pipes/search-for.pipe';
 import { SortByPipe } from '../../pipes/sort-by.pipe';
 import { PokemonService } from '../../services/pokemon.service';
-import { ProductService } from '../../services/product.service';
 import { MultiSelectorComponent } from '../multi-selector/multi-selector.component';
+import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { SearchComponent } from '../search/search.component';
 import { SelectComponent } from '../select/select.component';
-import { PokemonCardPlaceholderComponent } from '../pokemon-card-placeholder/pokemon-card-placeholder.component';
-import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-grid',
@@ -33,7 +32,6 @@ import { finalize } from 'rxjs/operators';
 })
 export class ProductGridComponent implements OnInit {
   constructor(
-    public productService: ProductService,
     private pokemonService: PokemonService,
     private route: ActivatedRoute,
   ) {}

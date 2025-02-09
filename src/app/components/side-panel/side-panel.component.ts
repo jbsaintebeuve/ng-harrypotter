@@ -1,16 +1,13 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../services/product.service';
-import { SidePanelService } from '../../services/side-panel.service';
-import { Product } from '../../interfaces/product';
-import { ProductCardComponent } from '../product-card/product-card.component';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { faSolidCartShopping } from '@ng-icons/font-awesome/solid';
-import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
-import { RouterLink } from '@angular/router';
+import { SidePanelService } from '../../services/side-panel.service';
 import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.component';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 
 @Component({
   selector: 'app-side-panel',

@@ -41,12 +41,6 @@ export class PokemonService {
     );
   }
 
-  fetchPokemonByName(name: string): Observable<PokemonResponse> {
-    return this.http.get<PokemonResponse>(
-      `https://api.pokemontcg.io/v2/cards?q=name:${name}`,
-    );
-  }
-
   getPokemons(): Observable<PokemonCard[]> {
     return this.pokemonSubject.asObservable();
   }
@@ -65,7 +59,6 @@ export class PokemonService {
     const storedFav = localStorage.getItem('ng-poke-fav');
     if (storedFav) {
       this.fav = JSON.parse(storedFav);
-      // this.editFav();
     } else {
       this.fav = [];
     }
@@ -88,7 +81,6 @@ export class PokemonService {
     }
 
     const existingProduct = this.fav.find((f) => f === product.id);
-    // product.isFavorite = !product.isFavorite;
     if (existingProduct) {
       this.fav = this.fav.filter((f) => f !== product.id);
     } else {
@@ -114,12 +106,4 @@ export class PokemonService {
     this.updateFav();
     return this.fav;
   }
-
-  // editFav() {
-  //   this.products.forEach((product) => {
-  //     if (this.fav.includes(product.id)) {
-  //       product.isFavorite = true;
-  //     }
-  //   });
-  // }
 }
