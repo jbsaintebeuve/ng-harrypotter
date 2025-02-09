@@ -7,15 +7,24 @@ import { PokemonCard } from '../../interfaces/pokemon-card';
 import { PokemonResponse } from '../../interfaces/pokemon-response';
 import { catchError, retryWhen, delay, take, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgIf } from '@angular/common';
 import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { faSolidArrowRightLong } from '@ng-icons/font-awesome/solid';
 
 @Component({
   selector: 'app-pokemon-detail',
   standalone: true,
-  imports: [CurrencyPipe, QuantitySelectorComponent, RouterLink],
+  imports: [
+    CurrencyPipe,
+    QuantitySelectorComponent,
+    RouterLink,
+    NgIf,
+    NgIconComponent,
+  ],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss'],
+  providers: [provideIcons({ faSolidArrowRightLong })],
 })
 export class PokemonDetailComponent {
   pokemon: PokemonCard | null = null;
