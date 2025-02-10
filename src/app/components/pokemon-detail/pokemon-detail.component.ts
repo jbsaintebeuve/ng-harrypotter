@@ -10,7 +10,11 @@ import { of } from 'rxjs';
 import { CurrencyPipe, NgIf } from '@angular/common';
 import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { faSolidArrowRightLong } from '@ng-icons/font-awesome/solid';
+import {
+  faSolidArrowRightLong,
+  faSolidHeart,
+} from '@ng-icons/font-awesome/solid';
+import { faHeart } from '@ng-icons/font-awesome/regular';
 
 @Component({
   selector: 'app-pokemon-detail',
@@ -24,10 +28,10 @@ import { faSolidArrowRightLong } from '@ng-icons/font-awesome/solid';
   ],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss'],
-  providers: [provideIcons({ faSolidArrowRightLong })],
+  providers: [provideIcons({ faSolidArrowRightLong, faSolidHeart, faHeart })],
 })
 export class PokemonDetailComponent {
-  pokemon: PokemonCard | null = null;
+  pokemon: PokemonCard = {} as PokemonCard;
   isFlipped = false;
   quantity = 1;
   isLoading = false;
@@ -111,17 +115,16 @@ export class PokemonDetailComponent {
     }
     this.sidePanelService.open(true);
   }
-  get isFavorite(): boolean {
-    return this.pokemon
-      ? this.pokemonService.isFavorite(this.pokemon.id)
-      : false;
-  }
   onChangeQuantity(value: number) {
     this.quantity = value;
   }
-  switchFav() {
-    if (this.pokemon) {
-      this.pokemonService.addToFav(this.pokemon);
-    }
+  get isFavorite(): boolean {
+    return this.pokemonService.isFavorite(this.pokemon.id);
+  }
+
+  switchFav(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.pokemonService.addToFav(this.pokemon);
   }
 }

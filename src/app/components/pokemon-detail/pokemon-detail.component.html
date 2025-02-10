@@ -19,8 +19,8 @@
         <div class="card-face card-front">
           <img
             id="card"
-            src="{{ pokemon?.images?.large }}"
-            alt="{{ pokemon?.name }}"
+            src="{{ pokemon.images.large }}"
+            alt="{{ pokemon.name }}"
           />
         </div>
         <div class="card-face card-back">
@@ -31,37 +31,52 @@
   </div>
   <div class="md:w-2/3">
     <div class="flex justify-between items-center">
-      <h1 class="font-bold text-4xl text-blue-800">{{ pokemon?.name }}</h1>
-      <p class="text-2xl text-blue-500 font-bold">
-        #{{
-          (pokemon?.nationalPokedexNumbers)![0]
-            ? (pokemon?.nationalPokedexNumbers)![0]
-            : 'undefined'
-        }}
-      </p>
+      <div class="flex gap-3 items-end">
+        <h1 class="font-bold text-4xl text-blue-800">{{ pokemon.name }}</h1>
+        <p class="text-xl text-blue-500 font-bold">
+          #{{
+            pokemon.nationalPokedexNumbers![0]
+              ? pokemon.nationalPokedexNumbers![0]
+              : '00'
+          }}
+        </p>
+      </div>
+      @if (isFavorite) {
+      <ng-icon
+        (click)="switchFav($event)"
+        class="text-lg text-neutral-700 hover:cursor-pointer select-none pointer-events-auto"
+        name="faSolidHeart"
+      />
+      } @else {
+      <ng-icon
+        (click)="switchFav($event)"
+        class="text-lg text-neutral-600 hover:cursor-pointer select-none pointer-events-auto"
+        name="faHeart"
+      />
+      }
     </div>
     <div class="flex flex-col gap-5 items-start mt-5">
       <div class="flex justify-between items-center w-full">
         <p>
           Rareté:
           <span class="font-medium">{{
-            pokemon?.rarity ? pokemon?.rarity : '-'
+            pokemon.rarity ? pokemon.rarity : '-'
           }}</span>
         </p>
         <p>
           Type:
           <span class="font-medium">{{
-            pokemon?.types ? pokemon?.types : '-'
+            pokemon.types ? pokemon.types : '-'
           }}</span>
         </p>
         <p>
           HP:
-          <span class="font-medium">{{ pokemon?.hp ? pokemon?.hp : '-' }}</span>
+          <span class="font-medium">{{ pokemon.hp ? pokemon.hp : '-' }}</span>
         </p>
       </div>
       <div class="flex flex-col gap-2 border-t w-full border-gray-200 py-4">
         <h3 class="font-semibold text-xl">Attaque:</h3>
-        @for (attack of pokemon?.attacks; track $index) {
+        @for (attack of pokemon.attacks; track $index) {
         <div class="bg-gray-100 flex flex-col gap-2 rounded-lg p-4 w-full">
           <p class="font-medium uppercase">{{ attack.name }}</p>
           <p *ngIf="attack.damage">Dégâts: {{ attack.damage }}</p>
@@ -72,24 +87,24 @@
         </div>
         }
       </div>
-      @if (pokemon?.evolvesFrom || pokemon?.evolvesTo) {
+      @if (pokemon.evolvesFrom || pokemon.evolvesTo) {
       <div class="flex flex-col gap-2 border-t border-gray-200 py-4 w-full">
         <h3 class="font-semibold text-xl">Évolution:</h3>
         <div class="flex items-center gap-4">
-          @if (pokemon?.evolvesFrom) {
+          @if (pokemon.evolvesFrom) {
           <a
             class="py-2 px-5 bg-gray-100 rounded-lg hover:text-blue-500"
             [routerLink]="['/']"
-            [queryParams]="{ search: pokemon?.evolvesFrom }"
-            >{{ pokemon?.evolvesFrom }}</a
+            [queryParams]="{ search: pokemon.evolvesFrom }"
+            >{{ pokemon.evolvesFrom }}</a
           >
           <ng-icon name="faSolidArrowRightLong" class="text-neutral-700" />
           }
           <p class="font-bold py-2 px-5 bg-gray-100 rounded-lg">
-            {{ pokemon?.name }}
+            {{ pokemon.name }}
           </p>
-          @if (pokemon?.evolvesTo && pokemon?.evolvesTo?.length) { @for
-          (evolution of pokemon?.evolvesTo; track $index) {
+          @if (pokemon.evolvesTo && pokemon.evolvesTo.length) { @for (evolution
+          of pokemon.evolvesTo; track $index) {
           <ng-icon name="faSolidArrowRightLong" class="text-neutral-700" />
           <a
             class="py-2 px-5 bg-gray-100 rounded-lg hover:text-blue-500"
@@ -105,7 +120,7 @@
         <p class="text-lg font-bold">
           Prix moyen:
           {{
-            pokemon?.cardmarket?.prices?.averageSellPrice
+            pokemon.cardmarket.prices.averageSellPrice
               | currency : 'EUR' : 'symbol' : '1.2-2' : 'fr'
           }}
         </p>
