@@ -42,28 +42,18 @@ export class SidePanelComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
 
-    if (this.cart.stock.length === 0) {
-      this.isLoading = false;
-      return;
-    }
-
-    this.shoppingCartService
-      .totalCart()
+    this.shoppingCartService.cart$
       .pipe(
-        tap(() => (this.isLoading = true)),
-        finalize(() => (this.isLoading = false)),
+        tap(() => {
+          this.isLoading = this.cart.stock.length > 0;
+        }),
         takeUntil(this.destroy$),
       )
-      .subscribe((total) => {
-        this.cart = this.shoppingCartService.getCart();
-        this.cart.total_price = total;
-      });
-
-    this.shoppingCartService.cart$
-      .pipe(takeUntil(this.destroy$))
       .subscribe((cart) => {
         this.cart = cart;
+        this.isLoading = false;
       });
+
     setTimeout(() => {
       const hostElement = document.querySelector('app-side-panel');
       hostElement?.classList.add('open');

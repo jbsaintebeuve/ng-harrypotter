@@ -47,7 +47,15 @@ export class ShoppingCartService {
 
   private updateCart() {
     localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
-    this.cartSubject.next({ ...this.cart });
+    if (this.cart.stock.length > 0) {
+      this.totalCart().subscribe((total) => {
+        this.cart.total_price = total;
+        this.cartSubject.next({ ...this.cart });
+      });
+    } else {
+      this.cart.total_price = 0;
+      this.cartSubject.next({ ...this.cart });
+    }
   }
 
   addToCart(productId: string, quantity: number) {
