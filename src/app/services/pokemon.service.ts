@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, take } from 'rxjs/operators';
+import { shareReplay, tap } from 'rxjs/operators';
 import { PokemonCard } from '../interfaces/pokemon-card';
 import { PokemonResponse } from '../interfaces/pokemon-response';
 
@@ -9,13 +9,20 @@ import { PokemonResponse } from '../interfaces/pokemon-response';
   providedIn: 'root',
 })
 export class PokemonService {
+  private cache: { [key: string]: Observable<PokemonResponse> } = {};
+  private mainPokemonsCache$: Observable<any> | null = null;
+
   constructor(private http: HttpClient) {}
 
   private pokemonSubject = new BehaviorSubject<PokemonCard[]>([]);
   private typesSubject = new BehaviorSubject<string[]>([]);
 
   fetchPokemons(): Observable<any> {
-    return this.http
+    if (this.mainPokemonsCache$) {
+      return this.mainPokemonsCache$;
+    }
+
+    this.mainPokemonsCache$ = this.http
       .get(
         'https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[1%20TO%20150]',
       )
@@ -31,14 +38,22 @@ export class PokemonService {
           this.pokemonSubject.next(data);
           this.typesSubject.next(Array.from(allTypes));
         }),
-        take(1),
+        shareReplay(1),
       );
+
+    return this.mainPokemonsCache$;
   }
 
   fetchPokemon(id: string): Observable<PokemonResponse> {
-    return this.http.get<PokemonResponse>(
-      `https://api.pokemontcg.io/v2/cards/${id}`,
-    );
+    if (this.cache[id]) {
+      return this.cache[id];
+    }
+
+    this.cache[id] = this.http
+      .get<PokemonResponse>(`https://api.pokemontcg.io/v2/cards/${id}`)
+      .pipe(shareReplay(1));
+
+    return this.cache[id];
   }
 
   getPokemons(): Observable<PokemonCard[]> {

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { PokemonCard } from '../../interfaces/pokemon-card';
 import { PokemonService } from '../../services/pokemon.service';
@@ -14,26 +15,29 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
   styles: ``,
 })
 export class FavorisListComponent {
-  private pokemons: PokemonCard[] = [];
+  favoritePokemons: PokemonCard[] = [];
   isLoading = true;
   placeholders = Array(6).fill({});
 
   constructor(public pokemonService: PokemonService) {
-    if (this.pokemonService.getFav().length === 0) {
+    const favIds = this.pokemonService.getFav();
+
+    if (favIds.length === 0) {
       this.isLoading = false;
     } else {
-      this.pokemonService
-        .fetchPokemons()
+      const pokemonRequests = favIds.map((id) =>
+        this.pokemonService.fetchPokemon(id),
+      );
+
+      forkJoin(pokemonRequests)
         .pipe(
           finalize(() => {
             this.isLoading = false;
           }),
         )
-        .subscribe();
-
-      this.pokemonService.getPokemons().subscribe((pokemons) => {
-        this.pokemons = pokemons;
-      });
+        .subscribe((responses) => {
+          this.favoritePokemons = responses.map((response) => response.data);
+        });
     }
   }
 
@@ -41,12 +45,8 @@ export class FavorisListComponent {
     return this.pokemonService.getFavoriteCount();
   }
 
-  get favoritePokemons(): PokemonCard[] {
-    const favIds = this.pokemonService.getFav();
-    return this.pokemons.filter((pokemon) => favIds.includes(pokemon.id));
-  }
-
   clearFavorites() {
     this.pokemonService.clearFav();
+    this.favoritePokemons = [];
   }
 }

@@ -75,12 +75,14 @@
         <p class="font-semibold text-normal mb-4">
           Récapitulatif de la commande
         </p>
-        @for (item of cart.stock; track $index) {
+        @if (isLoading) { @for (placeholder of placeholders; track $index) {
+        <app-item-placeholder [minimized]="true"></app-item-placeholder>
+        } } @else { @for (item of cart.stock; track $index) {
         <app-shopping-cart-item
           [item]="item"
           [minimized]="true"
         ></app-shopping-cart-item>
-        }
+        } }
         <div class="flex justify-between items-center my-4">
           <p class="text-lg font-bold">
             Total: {{ cart.total_price | currency : 'EUR' : true : '' : 'fr' }}

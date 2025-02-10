@@ -1,5 +1,5 @@
 import { CurrencyPipe, NgClass } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,11 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { finalize, Subject, takeUntil, tap } from 'rxjs';
 import { ShoppingCart } from '../../interfaces/shopping-cart';
 import { ShoppingCartService } from '../../services/shopping-cart.service';
 import { FormInputComponent } from '../form-input/form-input.component';
-import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
 import { PopupComponent } from '../popup/popup.component';
+import { ShoppingCartComponentItem } from '../shopping-cart-item/shopping-cart-item.component';
+import { ItemPlaceholderComponent } from '../item-placeholder/item-placeholder.component';
 
 @Component({
   selector: 'app-cart-form',
@@ -24,11 +26,12 @@ import { PopupComponent } from '../popup/popup.component';
     ReactiveFormsModule,
     NgClass,
     PopupComponent,
+    ItemPlaceholderComponent,
   ],
   templateUrl: './cart-form.component.html',
   styles: ``,
 })
-export class CartFormComponent {
+export class CartFormComponent implements OnInit, OnDestroy {
   @ViewChild(PopupComponent) popup!: PopupComponent;
 
   cart: ShoppingCart = {
@@ -42,6 +45,10 @@ export class CartFormComponent {
     title: 'Confirmation de commande',
     description: '',
   };
+
+  isLoading = true;
+  placeholders = Array(3).fill({});
+  private destroy$ = new Subject<void>();
 
   constructor(
     private shoppingCartService: ShoppingCartService,
@@ -61,21 +68,46 @@ export class CartFormComponent {
 
   ngOnInit() {
     this.cart = this.shoppingCartService.getCart();
-    this.shoppingCartService.totalCart().subscribe((total) => {
-      this.cart.total_price = total;
-    });
+
+    if (this.cart.stock.length === 0) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.shoppingCartService
+      .totalCart()
+      .pipe(
+        tap(() => (this.isLoading = true)),
+        finalize(() => (this.isLoading = false)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((total) => {
+        this.cart = this.shoppingCartService.getCart();
+        this.cart.total_price = total;
+      });
+
+    this.shoppingCartService.cart$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cart) => {
+        this.cart = cart;
+      });
 
     if (this.cart.stock.length === 0) {
       this.router.navigate(['/panier']);
     }
   }
 
-  onCartUpdate() {
-    this.cart = this.shoppingCartService.getCart();
-    this.shoppingCartService.totalCart().subscribe((total) => {
-      this.cart.total_price = total;
-    });
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
+
+  // onCartUpdate() {
+  //   this.cart = this.shoppingCartService.getCart();
+  //   this.shoppingCartService.totalCart().subscribe((total) => {
+  //     this.cart.total_price = total;
+  //   });
+  // }
 
   clearCart() {
     this.cart = this.shoppingCartService.clearCart();

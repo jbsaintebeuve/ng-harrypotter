@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ShoppingCart, ShoppingCartProduct } from '../interfaces/shopping-cart';
 import { PokemonService } from './pokemon.service';
-import { BehaviorSubject, Observable, forkJoin, map, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  forkJoin,
+  map,
+  of,
+  shareReplay,
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,13 +18,18 @@ export class ShoppingCartService {
     total_price: 0,
     stock: [],
   });
-  cart$ = this.cartSubject.asObservable();
+  cart$ = this.cartSubject.asObservable().pipe(shareReplay(1));
 
-  cart: ShoppingCart = {
+  private cart: ShoppingCart = {
     total_price: 0,
     stock: [],
   };
-  static cart$: any;
+
+  private priceCache: { [key: string]: number } = {};
+
+  constructor(private pokemonService: PokemonService) {
+    this.getCart();
+  }
 
   getCart(): ShoppingCart {
     const storedCart = localStorage.getItem('ng-poke-cart');
@@ -34,7 +46,6 @@ export class ShoppingCartService {
   }
 
   private updateCart() {
-    // this.totalCart();
     localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
     this.cartSubject.next({ ...this.cart });
   }
@@ -63,7 +74,6 @@ export class ShoppingCartService {
       (p: ShoppingCartProduct) => p.id !== productId,
     );
     localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
-    // this.totalCart();
     this.updateCart();
     return this.cart;
   }
@@ -88,7 +98,6 @@ export class ShoppingCartService {
       stock: [],
     };
     localStorage.setItem('ng-poke-cart', JSON.stringify(this.cart));
-    // this.totalCart();
     this.updateCart();
     return this.cart;
   }
@@ -98,15 +107,19 @@ export class ShoppingCartService {
       return of(0);
     }
 
-    const pokemonRequests = this.cart.stock.map((item) =>
-      this.pokemonService.fetchPokemon(item.id).pipe(
+    const pokemonRequests = this.cart.stock.map((item) => {
+      if (this.priceCache[item.id]) {
+        return of(this.priceCache[item.id] * item.quantity);
+      }
+      return this.pokemonService.fetchPokemon(item.id).pipe(
         map((response) => {
           const price =
             response.data?.cardmarket?.prices?.averageSellPrice || 0;
+          this.priceCache[item.id] = price;
           return price * item.quantity;
         }),
-      ),
-    );
+      );
+    });
 
     return forkJoin(pokemonRequests).pipe(
       map((prices) => {
@@ -115,8 +128,7 @@ export class ShoppingCartService {
         this.updateCart();
         return total;
       }),
+      shareReplay(1),
     );
   }
-
-  constructor(private pokemonService: PokemonService) {}
 }
