@@ -24,7 +24,7 @@ export class PokemonService {
 
     this.mainPokemonsCache$ = this.http
       .get(
-        'https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[1%20TO%20150]',
+        'https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:[1%20TO%20151]&orderBy=nationalPokedexNumbers&pageSize=151',
       )
       .pipe(
         tap((response: any) => {
